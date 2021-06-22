@@ -134,41 +134,49 @@
   }
   
   function showContactInfo() {
-    // Await for toggleTempFavItemsAtBackEnd request done.
-  	toggleTempFavItemsAtBackEnd();
+  	let times = toggleTempFavItemsAtBackEnd();
   	
-    hideElement(aboutInfo);
-    hideElement(welcomeMsg);
-    hideElement(loginForm);
-    hideElement(registerForm);
-    hideElement(itemList);
+  	// Display loading message.
+  	if(times > 0) showLoadingMessage('Saving user updates...');
+  	
+  	setTimeout(function() {
+  	  hideElement(aboutInfo);
+      hideElement(welcomeMsg);
+      hideElement(loginForm);
+      hideElement(registerForm);
+      hideElement(itemList);
     
-    showElement(logoutBtn);
-    showElement(categoryMenu);
-    showElement(exploreBtn);
-    showElement(lotteryBtn);
-    showElement(favoriteBtn);
-    showElement(recommendBtn);
-    showElement(contactInfo);
+      showElement(logoutBtn);
+      showElement(categoryMenu);
+      showElement(exploreBtn);
+      showElement(lotteryBtn);
+      showElement(favoriteBtn);
+      showElement(recommendBtn);
+      showElement(contactInfo);
+  	}, 1500 * times);
   }
   
   function showAboutInfo() {
-  	// Await for toggleTempFavItemsAtBackEnd request done.
-  	toggleTempFavItemsAtBackEnd();
+  	let times = toggleTempFavItemsAtBackEnd();
   	
-    hideElement(contactInfo);
-    hideElement(welcomeMsg);
-    hideElement(loginForm);
-    hideElement(registerForm);
-    hideElement(itemList);
+  	// Display loading message.
+  	if(times > 0) showLoadingMessage('Saving user updates...');
+  	
+  	setTimeout(function() {
+  	  hideElement(contactInfo);
+      hideElement(welcomeMsg);
+      hideElement(loginForm);
+      hideElement(registerForm);
+      hideElement(itemList);
     
-    showElement(logoutBtn);
-    showElement(categoryMenu);
-    showElement(exploreBtn);
-    showElement(lotteryBtn);
-    showElement(favoriteBtn);
-    showElement(recommendBtn);
-    showElement(aboutInfo);
+      showElement(logoutBtn);
+      showElement(categoryMenu);
+      showElement(exploreBtn);
+      showElement(lotteryBtn);
+      showElement(favoriteBtn);
+      showElement(recommendBtn);
+      showElement(aboutInfo);
+  	}, 1500 * times);
   }
   
   // -----------------------------------
