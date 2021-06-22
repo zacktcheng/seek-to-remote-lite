@@ -87,7 +87,7 @@ public class MySQLConnection {
 		List<String> keywords = null;
 		String descriptionInPlainText = "";
 
-		if(!item.getDescription().isBlank()) {
+		if(item.getDescription() != null && !item.getDescription().trim().isEmpty()) {
 			String descriptionInHTML = item.getDescription();
 			descriptionInPlainText = Helper.getPlainTextFromHTMLFormatText(descriptionInHTML).trim();
 

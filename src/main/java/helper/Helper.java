@@ -114,7 +114,7 @@ public class Helper {
 	
 	public static String getPlainTextFromHTMLFormatText(String htmlFormatText) {
 		
-		if(htmlFormatText != null && !htmlFormatText.isBlank()) {
+		if(htmlFormatText != null && !htmlFormatText.trim().isEmpty()) {
 			// Replace all occurrences of one or more HTML tags with optional
 			// whitespace in between with a single space character. 
 			return htmlFormatText.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");

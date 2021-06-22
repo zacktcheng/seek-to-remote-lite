@@ -92,7 +92,7 @@ public class RemotiveClient {
 					JSONObject object = array.getJSONObject(i);
 					String itemId = Helper.getStringFieldOrEmpty(object, "id");
 					
-					if(!itemId.isBlank() && !visitedItemIds.contains(itemId)) {
+					if(itemId != null && !itemId.trim().isEmpty() && !visitedItemIds.contains(itemId)) {
 						Item item = getItemForItemList(object);
 						itemList.add(item);
 						visitedItemIds.add(itemId);
@@ -141,11 +141,11 @@ public class RemotiveClient {
 		
 		String companyName = Helper.getStringFieldOrEmpty(object, "company_name");
 		
-		if(!companyName.isBlank()) {
+		if(companyName != null && !companyName.trim().isEmpty()) {
 			ClearbitClient clearbitClient = new ClearbitClient();
 			String keywordForLogoUrl = Helper.trimKeywordToGetCompanyLogoUrl(object);
 
-			if(!keywordForLogoUrl.isBlank()) {
+			if(keywordForLogoUrl != null && !keywordForLogoUrl.trim().isEmpty()) {
 				JSONObject domainObj = clearbitClient.getCompanyDomain(keywordForLogoUrl);
 				
 				// Only assign back to companyLogoUrl if the logo url has passed the url validation.
@@ -188,7 +188,7 @@ public class RemotiveClient {
 	
 	public static String getCategorySlug(String category, boolean setDefaultSlug) {
 		
-		if(category == null || category.isBlank() || !CATEGORIES.containsKey(category)) {
+		if(category == null || category.trim().isEmpty() || !CATEGORIES.containsKey(category)) {
 			if(setDefaultSlug) return CATEGORIES.get("Software Development");
 			return null;
 		}
