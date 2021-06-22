@@ -1,0 +1,436 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+body setting
+*/
+body {
+  margin: auto;
+  background-image: 
+    linear-gradient(#f4976cba, #f4d463),
+    url("https://st3.depositphotos.com/11601342/19204/v/450/depositphotos_192041854-stock-illustration-vector-profession-pattern-profession-seamless.jpg");
+  background-repeat: around;
+  background-attachment: fixed;
+  background-position: center top;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 0.9em;
+}
+
+span {
+  font-family: "Candal", sans-serif;
+  font-size: 1.2em;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+header
+*/
+#header {
+  margin: auto;
+  max-width: 800px;
+  width: 100%;
+  height: 40px;
+  border-bottom: 2px solid #d2fdff;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  background: #303c6c;
+  border-radius: 0px 0px 3px 3px;
+  padding-left: 1%;
+  padding-right: 1%;
+}
+
+#header > span {
+  color: #fbe8a6;
+  text-decoration: none;
+}
+
+#header-nav {
+  max-width: 80px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#header-nav div {
+  cursor: pointer;
+  position: relative;
+  top: 2px;
+  color: #d2fdff;
+}
+
+#header-nav div:hover {
+  cursor: pointer;
+  position: relative;
+  top: 2px;
+  color: #fbe8a6;
+}
+
+#header-nav div > span {
+  visibility: hidden;
+  width: 60px;
+  height: 20px;
+  background-color: #d2fdff;
+  color: #303c6c;
+  text-align: center;
+  border-radius: 10px;
+  padding: 2px;
+  font-size: 0.7em;
+  position: absolute;
+  z-index: 1;
+  top: 25px;
+  right: 5px;
+}
+
+#header-nav div:hover > span {
+  visibility: visible;
+}
+
+/*
+Parent
+*/
+.parent {
+  display: flex;
+  margin: auto;
+  max-width: 800px;
+  min-height: 800px;
+  color: #303c6c;
+}
+
+.left-child {
+  width: 20%;
+  display: flex;
+  padding-right: 0.5%;
+}
+
+.panel {
+  position: relative;
+  width: 100%;
+  height: 30%;
+  max-height: 240px;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.servelets {
+  background: #fbe8a6;
+  text-align: left;
+  display: flex;
+  padding: 5px;
+  height: 17%;
+  border-radius: 3px;
+  border-bottom: 2px solid #ffffff;
+}
+
+.servelets:hover {
+  text-align: left;
+  display: flex;
+  padding: 5px;
+  height: 17%;
+  border-radius: 3px;
+}
+
+#category-menu {
+  color:#303c6c;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  font-size: 0.8em;
+  outline: none;
+}
+
+.servelets:hover {
+  cursor: pointer;
+  background: #d2fdff;
+}
+
+.servelets > a {
+  position: relative;
+  text-decoration: none;
+  font-size: 0.8em;
+  bottom: 3px;
+  left: 5px;
+}
+
+.panel .material-icons {
+  position: relative;
+  top: 7px;
+  font-size: 2em;
+}
+
+.nav-btn {
+  color: #303c6c;
+}
+
+.nav-btn .active {
+  color: #f4976c;
+}
+
+.right-child {
+  width: 80%;
+  padding-left: 0.5%;
+}
+
+.background {
+  position: relative;
+  width: 100%;
+  height: 80%;
+  top: 80px;
+  background: #fbe8a6;
+  border-radius: 3px;
+  border-bottom: 2px solid #ffffff;
+}
+
+.form {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form h1 {
+  font-size: 1.2em;
+  padding: 5% 5% 2.5% 5%;
+}
+
+.info {
+  padding: 0% 5% 2.5% 5%;
+  font-size: 0.8em;
+  line-height: 1.6;
+  text-align: left;
+}
+
+#welcome-msg {
+  position: relative;
+  top: 12%;
+  width: 80%;
+  height: 35%;
+  margin: auto;
+  text-align: center;
+}
+
+#welcome-msg div {
+  padding: 3%;
+}
+
+#welcome-msg p {
+  font-size: 0.8em;
+  line-height: 1.6;
+}
+
+#login-form {
+  border-left: 1px solid #f4976c;
+  border-right: 1px solid #f4976c;
+  position: relative;
+  width: 55%;
+  height: 35%;
+  margin: auto;
+  padding: 2%;
+  border-radius: 0px 0px 9px 9px;
+  overflow: visible;
+}
+
+#login-form label {
+  font-size: 0.9em;
+}
+
+#login-form input {
+	border: none;
+	margin-bottom: 1%;
+	padding: 1%;
+	width: 100%;
+}
+
+#login-form button {
+  display: block;
+  border: 1px solid #f4976c;
+  color: #303c6c;
+  border-radius: 3px 3px 3px 3px;
+	cursor: pointer;
+  margin-left: auto;
+  background: none;
+}
+
+#login-form button:hover {
+  background: #f4976c;
+  color: #fbe8a6;
+}
+
+#login-form #login-btn {
+  position: relative;
+  top: 3%;
+	padding: 2%;
+}
+
+#login-form #register-form-btn {
+  position: relative;
+  top: 6%;
+	padding: 2%;
+}
+
+#login-error {
+  color: #f4976c;
+  font-size: 1.1em;
+  position: relative;
+  text-align: center;
+  position: relative;
+  top: 15%;
+}
+
+/*
+Register form
+*/
+#register-form {
+  border-left: 1px solid #f4976c;
+  border-right: 1px solid #f4976c;
+  position: relative;
+  width: 55%;
+  height: 50%;
+  margin: auto;
+	overflow: visible;
+  padding: 2%;
+  border-radius: 0px 0px 9px 9px;
+}
+
+#register-form label {
+	font-size: 0.9em;
+}
+
+#register-form input {
+	border: none;
+	margin-bottom: 1%;
+	padding: 1%;
+	width: 100%;
+}
+
+#register-form button {
+  display: block;
+  border: 1px solid #f4976c;
+  color: #303c6c;
+  border-radius: 3px 3px 3px 3px;
+	cursor: pointer;
+  margin-left: auto;
+  background: none;
+}
+
+#register-form button:hover {
+  background: #f4976c;
+  color: #fbe8a6;
+}
+
+#register-form #register-btn {
+  position: relative;
+  top: 3%;
+	padding: 2%;
+}
+
+#register-form #login-form-btn {
+  position: relative;
+  top: 6%;
+	padding: 2%;
+}
+
+#register-result {
+  text-align: center;
+  font-size: 1.1em;
+	color: #f4976c;
+	padding-top: 12%;
+}
+
+/*
+Item-list
+*/
+.item {
+  background: #fbe8a6;
+  border-radius: 3px 3px 3px 3px;
+  border-bottom: 2px solid #ffffff;
+}
+
+.item > ul {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1%;
+}
+
+.item-job {
+  width: 80%;
+}
+
+.item-job label{
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  border-right: 1px solid #f4976c;
+}
+
+.item-job label:hover{
+  background: #d2fdff;
+}
+
+.item-label img {
+  border: 1px solid #f4976c;
+	height: 50px;
+	width: 50px;
+}
+
+.item-label span {
+  position: relative;
+  left: 1%;
+}
+
+.description {
+  padding: 1%;
+}
+
+input[type="checkbox"]{
+  position: absolute;
+  left: -9999px;
+}
+
+input[type="checkbox"] ~ ul{
+  height: 0;
+  transform: scaleY(0);
+}
+
+input[type="checkbox"]:checked ~ ul{
+  height: 100%;
+  transform-origin: top;
+  transition: transform .2s ease-out;
+  transform: scaleY(1);
+  border-right: 1px solid #f4976c;
+  font-size: 0.8em;
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+}
+
+.item-url {
+  border: none;
+  position: relative;
+  right: 2%;
+}
+
+.item-fav {
+   border: none;
+   position: relative;
+   right: 4%;
+}
+
+.item ul i {
+  color: #303c6c;
+}
+
+.item ul i:hover {
+  cursor: pointer;
+  color: #f4976c;
+}

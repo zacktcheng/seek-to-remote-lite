@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Item Recommendation">
+  <meta name="author" content="Zack Cheng">
+  <title>Seek to Remote Lite</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Candal&family=Noto+Sans+JP&family=Open+Sans:ital,wght@0,300;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+  <header id="header">
+      <span>Seek to Remote Lite</span>
+    <nav id="header-nav">
+      <div id="contact-btn">
+        <i class="material-icons">contact_page</i>
+        <span>Contact</span>
+      </div>
+      <div id="about-btn">
+        <i class="material-icons">help_center</i>
+        <span>About</span>
+      </div>
+      <div id="logout-btn">
+        <i class="material-icons">logout</i>
+        <span>Log-out</span>
+      </div>
+    </nav>
+  </header>
+  
+  <section class="parent">
+    <aside class="left-child">
+      <nav class="panel">
+        <select id="category-menu" class="servelets">
+          <option>Software Development</option>
+          <option>Customer Service</option>
+          <option>Design</option>
+          <option>Marketing</option>
+          <option>Sales</option>
+          <option>Product</option>
+          <option>Business</option>
+          <option>Data</option>
+          <option>DevOps / Sysadmin</option>
+          <option>Finance / Legal</option>
+          <option>Human Resources</option>
+          <option>QA</option>
+          <option>Teaching</option>
+          <option>Writing</option>
+          <option>Medical / Health</option>
+          <option>All others</option>
+        </select>
+        <div id="explore-btn" class="servelets">
+          <a href="#" class="nav-btn active">
+            <i class="material-icons">explore</i>Explore Openings
+          </a>
+        </div>
+        <div id="lottery-btn" class="servelets">
+          <a href="#" class="nav-btn">
+            <i class="material-icons">casino</i>I'm Feeling Lucky
+          </a>
+        </div>
+        <div id="favorite-btn" class="servelets">
+          <a href="#" class="nav-btn">
+            <i class="material-icons">star</i>My Favorites
+          </a>
+        </div>
+        <div id="recommend-btn" class="servelets">
+          <a href="#" class="nav-btn">
+            <i class="material-icons">recommend</i>Recommendation
+          </a>
+        </div>
+      </nav>
+    </aside>
+    
+    <section class="right-child">
+      <section class="background">
+        <section id="contact-info" class="form">
+          <h1>Contact:</h1>
+          <article class="info">
+            <p>Author: Zack Tsai-Tzu Cheng</p>
+          </article>
+        </section>
+        
+        <section id="about-info" class="form">
+          <h1>About:</h1>
+          <article class="info">
+            <p>This is an intro...</p>
+          </article>
+        </section>
+        
+        <section id="welcome-msg">
+          <span>Welcome ! Please login or register.</span>
+            <div>
+              <p>Just want to try out? Please use the username & password of the demo account to login:</p>
+              <p>{ Username: 1111 } { Password: 2222 }</p>
+              <p>(By using the demo account, you agree that all your saved data in this demo account are public to other end users. And the author has all rights to manage this demo account.)
+              </p>
+            </div>
+        </section>
+        
+        <section id="login-form">
+          <label for="username">Username:</label>
+          <input id="username" name="username" type="text">
+          <label for="password">Password:</label>
+          <input id="password" name="password" type="password">
+          <button id="login-btn">Login</button>
+          <button id="register-form-btn">New User? Register</button>
+          <p id="login-error"></p>
+        </section>
+        
+        <section id="register-form">
+          <label for="username">Username: *</label>
+          <input id="register-username" name="username" type="text">
+          <label for="password">Password: *</label>
+          <input id="register-password" name="password" type="password">
+          <label for="first-name">First Name: *</label>
+          <input id="register-first-name" name="first-name" type="text">
+          <label for="last-name">Last Name: *</label>
+          <input id="register-last-name" name="last-name" type="text">
+          <button id="register-btn">Register</button>
+          <button id="login-form-btn">Back to Login</button>  
+          <p id="register-result"></p>
+        </section>
+        
+        <ul id="item-list">
+          <li class="item">
+            <ul>
+              <li class="item-job">
+                <input type="checkbox" id="item-id">
+                <label for="item-id" class="item-label">
+                  <img src="https://avatars.githubusercontent.com/u/65567443?s=60&v=4">
+                  <span>
+                    <h5>Senior Graphic Programmer</h4>
+                    <h6>Golden Slash</h5>
+                  </span>
+                </label>
+                <ul>
+                  <li class="description">
+                    This is the job description.
+                  </li>
+                </ul>
+              </li>
+              <li class="item-url">
+                <a href="#">
+                  <i class="material-icons">open_in_new</i>
+                </a>
+              </li>
+              <li class="item-fav"><i class="material-icons">star</i></li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+    </section>
+  </section>
+  <script src="https://rawgit.com/emn178/js-md5/master/build/md5.min.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+
+</html>
