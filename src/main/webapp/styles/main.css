@@ -17,6 +17,7 @@ body {
   background-position: center top;
   font-family: "Noto Sans JP", sans-serif;
   font-size: 0.9em;
+  overflow: auto;
 }
 
 span {
@@ -191,6 +192,7 @@ Parent
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: auto;
 }
 
 .form h1 {
@@ -212,6 +214,7 @@ Parent
   height: 35%;
   margin: auto;
   text-align: center;
+  overflow: hidden;
 }
 
 #welcome-msg div {

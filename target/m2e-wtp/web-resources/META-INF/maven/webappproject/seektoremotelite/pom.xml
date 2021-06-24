@@ -55,7 +55,7 @@
 	<dependency>
 		<groupId>mysql</groupId>
 		<artifactId>mysql-connector-java</artifactId>
-		<version>8.0.18</version>
+		<version>8.0.25</version>
 	</dependency>
   </dependencies>
 
@@ -96,6 +96,9 @@
         	<groupId>com.heroku.sdk</groupId>
         	<artifactId>heroku-maven-plugin</artifactId>
         	<version>3.0.3</version>
+        	<configuration>
+        	<appName>seek-to-remote-lite</appName>
+        	</configuration>
       </plugin>
       </plugins>
     </pluginManagement>

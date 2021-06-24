@@ -2,48 +2,31 @@ package database;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class MySQLDatabaseUtility {
 	
-	private static URI getDB_URI() {
-		
-		URI DB_URI = null;
+	private static URI databaseUri;
+	
+	public MySQLDatabaseUtility() {
 		
 		try {
-			DB_URI = new URI(System.getenv("CLEARDB_DATABASE_URL"));
-		}
-		catch (URISyntaxException e) { e.printStackTrace(); }
-
-		return DB_URI;
+			databaseUri = new URI(System.getenv("CLEARDB_DATABASE_URL"));
+		} 
+		catch(URISyntaxException e) { e.printStackTrace(); }
 	}
 	
-	public static String getDB_USERNAME() {
-		
-		URI DB_URI = getDB_URI();
-		
-		if(DB_URI != null && DB_URI.getUserInfo() != null) {
-			return DB_URI.getUserInfo().split(":")[0];
-		}    	
-        return null; 
-    }
-    
-    public static String getDB_PASSWORD() {
-    	
-    	URI DB_URI = getDB_URI();
-		
-		if(DB_URI != null && DB_URI.getUserInfo() != null) {
-			return DB_URI.getUserInfo().split(":")[1];
-		}
-        return null;
-    }
-    
-    public static String getDB_URL() {
-    	
-    	URI DB_URI = getDB_URI();
-    	
-    	if(DB_URI != null && DB_URI.getHost() != null && DB_URI.getPath() != null) {
-    		return "jdbc:mysql://" + DB_URI.getHost() + DB_URI.getPath();
-		}
-    	return null;
-    }
+	public String getDatabaseUrl() {
+		return "jdbc:mysql://" + databaseUri.getHost() + databaseUri.getPath();
+	}
+	
+	public Connection getConnection() throws SQLException {
+	    String username = databaseUri.getUserInfo().split(":")[0];
+	    String password = databaseUri.getUserInfo().split(":")[1];
+	    String databaseUrl = "jdbc:mysql://" + databaseUri.getHost() + databaseUri.getPath();
+	    
+	    return DriverManager.getConnection(databaseUrl, username, password);
+	}
 }

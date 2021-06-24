@@ -1,7 +1,6 @@
 package database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,17 +16,15 @@ import helper.Helper;
 public class MySQLConnection {
 	
 	private Connection conn;
-	private static final String DB_URL = MySQLDatabaseUtility.getDB_URL();
-	private static final String DB_USERNAME = MySQLDatabaseUtility.getDB_USERNAME();
-	private static final String DB_PASSWORD = MySQLDatabaseUtility.getDB_PASSWORD();
-
+	
 	public MySQLConnection() {
 		
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver").getConstructor().newInstance();
-			conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = new MySQLDatabaseUtility().getConnection();
 		} 
-		catch(Exception e) { e.printStackTrace(); }
+		catch (ClassNotFoundException e) { e.printStackTrace(); }
+		catch(SQLException e) { e.printStackTrace(); } 
 	}
 
 	public void close() {

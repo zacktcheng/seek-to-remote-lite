@@ -184,6 +184,13 @@
   // -----------------------------------
 
   function login() {
+    hideElement(loginForm);
+    hideElement(welcomeMsg);
+    
+    let itemList = document.getElementById('item-list');
+    itemList.innerHTML = ''; // clear current results
+    showElement(itemList);
+    
     let username = document.querySelector('#username').value;
     let password = document.querySelector('#password').value;
     password = md5(username + md5(password));
@@ -194,8 +201,12 @@
       user_id : username,
       password : password,
     });
+    
+    // Display loading message.
+  	showLoadingMessage('Logging in...');
 
-    ajax('POST', url, req,
+	setTimeout(function() {
+	  ajax('POST', url, req,
       // successful callback
       function(res) {
         let result = JSON.parse(res);
@@ -208,6 +219,7 @@
       function() {
         showLoginError();
       });
+	}, 1500);
   }
 
   function showLoginError() {
@@ -233,7 +245,7 @@
     	return
     }
     
-    if(username.match(/^[a-z0-9_]+$/) === null) {
+    if(username.match(/^[a-z0-9]+$/i) === null) {
     	showRegisterResult('Invalid username.');
     	return
     }

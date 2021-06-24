@@ -37,9 +37,12 @@ public class Helper {
 
 		BufferedReader reader = new BufferedReader(request.getReader());
 		StringBuilder requestBody = new StringBuilder();
-
-		while(reader.ready()) { requestBody.append(reader.readLine()); }
+		String line = null;
 		
+		while ((line = reader.readLine()) != null) {
+			requestBody.append(line);
+		}
+
 		return new JSONObject(requestBody.toString());
 	}
 
