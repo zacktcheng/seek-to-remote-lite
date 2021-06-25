@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="description" content="Item Recommendation">
   <meta name="author" content="Zack Cheng">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Seek to Remote Lite</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -119,18 +120,15 @@
           </article>
         </section>
         
-        <section id="welcome-msg">
-          <span>Welcome ! Please login or register.</span>
-            <div>
+        <section id="login-form">
+          <div class="welcome-msg">
+              <span>Welcome ! Please login or register.</span>
               <p>
               Just want to try out?<br> 
               Please use the username & password of the demo account to login:<br>
                Username: 1111 | Password: 2222 <br>
               </p>
             </div>
-        </section>
-        
-        <section id="login-form">
           <label for="username">Username:</label>
           <input id="username" name="username" type="text">
           <label for="password">Password:</label>
@@ -141,17 +139,25 @@
         </section>
         
         <section id="register-form">
-          <label for="username">Username (alphanumeric only, no spaces) : *</label>
+          <div class="welcome-msg">
+              <span>Welcome ! Please login or register.</span>
+              <p>
+              Please follow these rules to set up your account:<br>
+              6 characters long at minimum, can be any combination of letters and numbers.<br>
+              Cannot contain non-alphanumeric characters or white spaces.<br>
+              </p>
+            </div>
+          <label for="username">Username: *</label>
           <input id="register-username" name="username" type="text">
-          <label for="password">Password (alphanumeric only, no spaces) : *</label>
+          <label for="password">Password: *</label>
           <input id="register-password" name="password" type="password">
-          <label for="first-name">First Name (alphanumeric only, no spaces) : *</label>
+          <label for="first-name">First Name: *</label>
           <input id="register-first-name" name="first-name" type="text">
-          <label for="last-name">Last Name (alphanumeric only, no spaces) : *</label>
+          <label for="last-name">Last Name: *</label>
           <input id="register-last-name" name="last-name" type="text">
           <button id="register-btn">Register</button>
           <button id="login-form-btn">Back to Login</button>  
-          <p id="register-result"></p>
+          <div id="register-result"></div>
         </section>
         
         <ul id="item-list">

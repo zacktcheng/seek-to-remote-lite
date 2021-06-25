@@ -16,7 +16,6 @@
   var lotteryBtn = document.getElementById('lottery-btn');
   var favoriteBtn = document.getElementById('favorite-btn');
   var recommendBtn = document.getElementById('recommend-btn');
-  var welcomeMsg = document.getElementById('welcome-msg');
   var contactInfo = document.getElementById('contact-info');
   var aboutInfo = document.getElementById('about-info');
   var loginForm = document.getElementById('login-form');
@@ -76,7 +75,6 @@
     
     hideElement(contactInfo);
     hideElement(aboutInfo);
-    hideElement(welcomeMsg);
     hideElement(loginForm);
     hideElement(registerForm);
     
@@ -109,7 +107,6 @@
     
     clearLoginError();
     
-    showElement(welcomeMsg);
     showElement(loginForm);
   }
   
@@ -129,19 +126,14 @@
     
     clearRegisterResult();
     
-    showElement(welcomeMsg);
     showElement(registerForm);
   }
   
   function showContactInfo() {
-  	let times = toggleTempFavItemsAtBackEnd();
-  	
-  	// Display loading message.
-  	if(times > 0) showLoadingMessage('Saving user updates...');
+    let initSec = initSessionAndprocessFavItems('Saving user updates...');
   	
   	setTimeout(function() {
   	  hideElement(aboutInfo);
-      hideElement(welcomeMsg);
       hideElement(loginForm);
       hideElement(registerForm);
       hideElement(itemList);
@@ -153,18 +145,14 @@
       showElement(favoriteBtn);
       showElement(recommendBtn);
       showElement(contactInfo);
-  	}, 1500 * times);
+  	}, 1500 * initSec);
   }
   
   function showAboutInfo() {
-  	let times = toggleTempFavItemsAtBackEnd();
-  	
-  	// Display loading message.
-  	if(times > 0) showLoadingMessage('Saving user updates...');
-  	
+    let initSec = initSessionAndprocessFavItems('Saving user updates...');
+    
   	setTimeout(function() {
   	  hideElement(contactInfo);
-      hideElement(welcomeMsg);
       hideElement(loginForm);
       hideElement(registerForm);
       hideElement(itemList);
@@ -176,7 +164,7 @@
       showElement(favoriteBtn);
       showElement(recommendBtn);
       showElement(aboutInfo);
-  	}, 1500 * times);
+  	}, 1500 * initSec);
   }
   
   // -----------------------------------
@@ -184,12 +172,7 @@
   // -----------------------------------
 
   function login() {
-    hideElement(loginForm);
-    hideElement(welcomeMsg);
-    
-    let itemList = document.getElementById('item-list');
-    itemList.innerHTML = ''; // clear current results
-    showElement(itemList);
+    let initSec = initSessionAndprocessFavItems('Logging in...');
     
     let username = document.querySelector('#username').value;
     let password = document.querySelector('#password').value;
@@ -201,9 +184,6 @@
       user_id : username,
       password : password,
     });
-    
-    // Display loading message.
-  	showLoadingMessage('Logging in...');
 
 	setTimeout(function() {
 	  ajax('POST', url, req,
@@ -219,7 +199,7 @@
       function() {
         showLoginError();
       });
-	}, 1500);
+	}, 1500 * initSec);
   }
 
   function showLoginError() {
@@ -294,19 +274,15 @@
   // -----------------------------------
   
   function logout() {
-  	let times = toggleTempFavItemsAtBackEnd();
+    let initSec = initSessionAndprocessFavItems('Saving user updates...');
   	hideElement(contactInfo);
     hideElement(aboutInfo);
-    
-    let itemList = document.getElementById('item-list');
-    itemList.innerHTML = ''; // clear current results
-    showElement(itemList);
-    
-    // Display loading message.
-  	if(times > 0) showLoadingMessage('Saving user updates...');
   	
   	setTimeout(function() {
-  	  // The request parameters
+      // Display loading message.
+      showLoadingMessage('Logging out...');
+      
+      // The request parameters
       let url = './logout';
       let data = null;
   
@@ -323,7 +299,7 @@
         function() {
           showErrorMessage('Failed to logout.');
         });
-  	 }, 1500 * times);
+  	 }, 1500 * initSec);
   }
   
   // -----------------------------------
@@ -366,6 +342,21 @@
   	else { 
   	   tempFavItems[key] = [item, isPreviouslyFavorited];
   	}
+  }
+  
+  function initSessionAndprocessFavItems(msg) {
+    // Initiate a session with empty background.
+    let itemList = document.getElementById('item-list');
+    itemList.innerHTML = ''; // clear current results
+    
+    // Process remaining items then reset array empty. 
+    let itemsNum = toggleTempFavItemsAtBackEnd();
+    
+    // Print out loading message to notify the end user when itemsNum > 0.
+    if(itemsNum > 0 && typeof msg === 'string') {
+  	  showLoadingMessage(msg);
+  	}
+  	return itemsNum; // Will be passed as initSec to let ajax function await.
   }
   
   /**
@@ -470,23 +461,19 @@
    * /search?user_id=1111&category=Software Development
    */
   function loadSearchItems() {
-    let times = toggleTempFavItemsAtBackEnd();
+    let initSec = initSessionAndprocessFavItems('Saving user updates...');
     hideElement(contactInfo);
     hideElement(aboutInfo);
     activeBtn('explore-btn');
-  	
-  	// Display loading message.
-  	if(times > 0) showLoadingMessage('Saving user updates...');
 
     setTimeout(function() {
+      // Display loading message.
+      showLoadingMessage('Loading current openings...');
+      
       // The request parameters
       let url = './search';
       let params = 'user_id=' + user_id + '&category=' + category;
       let data = null;
-      
-      // Display loading message.
-      showLoadingMessage('Loading current openings...');
-      showElement(itemList);
 
       // make AJAX call
       ajax('GET', url + '?' + params, data,
@@ -505,7 +492,7 @@
         function() {
           showErrorMessage('Cannot load openings.');
         });
-    }, 1500 * times); 
+    }, 1500 * initSec); 
   }
   
   /**
@@ -513,24 +500,20 @@
    * /randomsearch?user_id=1111&category=Software Development
    */
   function loadRandomsearchItems() {
-  	let times = toggleTempFavItemsAtBackEnd();
+  	let initSec = initSessionAndprocessFavItems('Saving user updates...');
     hideElement(contactInfo);
     hideElement(aboutInfo);
     activeBtn('lottery-btn');
     
-    // Display loading message.
-    if(times > 0) showLoadingMessage('Saving user updates...');
-    
     setTimeout(function() {
+      // Display loading message.
+      showLoadingMessage('Loading random openings...');
+    
       // The request parameters
       let url = './randomsearch';
       let params = 'user_id=' + user_id + '&category=' + category;
       let data = null;
-      
-      // Display loading message.
-      showLoadingMessage('Loading random openings...');
-      showElement(itemList);
-      
+
       // make AJAX call
       ajax('GET', url + '?' + params, data,
         // successful callback
@@ -548,7 +531,7 @@
         function() {
           showErrorMessage('Cannot load random openings.');
         });
-    }, 1500 * times);
+    }, 1500 * initSec);
   }
 
   /**
@@ -556,23 +539,19 @@
    * /history?user_id=1111
    */
   function loadFavoriteItems() {
-  	let times = toggleTempFavItemsAtBackEnd();
+  	let initSec = initSessionAndprocessFavItems('Saving user updates...');
   	hideElement(contactInfo);
     hideElement(aboutInfo);
     activeBtn('favorite-btn');
-    
-    // Display loading message.
-    if(times > 0) showLoadingMessage('Saving user updates...');
-
+ 
     setTimeout(function() {
+      // Display loading message.
+      showLoadingMessage('Loading favorite job posts...');
+    
       // request parameters
       let url = './history';
       let params = 'user_id=' + user_id;
       let req = JSON.stringify({});
-      
-      // Display loading message.
-      showLoadingMessage('Loading favorite job posts...');
-      showElement(itemList);
 
       // make AJAX call
       ajax('GET', url + '?' + params, req, function(res) {
@@ -588,7 +567,7 @@
       function() {
         showErrorMessage('Cannot load favorite job posts.');
       });
-    }, 1500 * times);  
+    }, 1500 * initSec);  
   }
 
   /**
@@ -596,22 +575,18 @@
    * /recommendation?user_id=1111
    */
   function loadRecommendedItems() {
-  	let times = toggleTempFavItemsAtBackEnd();
+  	let initSec = initSessionAndprocessFavItems('Saving user updates...');
   	hideElement(contactInfo);
     hideElement(aboutInfo);
     activeBtn('recommend-btn');
     
-    // Display loading message.
-    if(times > 0) showLoadingMessage('Saving user updates...');
-    
     setTimeout(function() {
+      // Display loading message.
+      showLoadingMessage('Loading recommended jobs...');
+    
       // request parameters
       let url = './recommendation' + '?' + 'user_id=' + user_id + '&category=' + category;
       let data = null;
-      
-      // Display loading message.
-      showLoadingMessage('Loading recommended jobs...');
-      showElement(itemList);
     
       // make AJAX call
       ajax('GET', url, data,
@@ -630,7 +605,7 @@
        function() {
          showErrorMessage('Cannot load recommended jobs.');
        });
-    }, 1500 * times);
+    }, 1500 * initSec);
   }
 
   /**
