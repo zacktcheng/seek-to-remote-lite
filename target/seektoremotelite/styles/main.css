@@ -17,6 +17,7 @@ body {
   font-family: "Noto Sans JP", sans-serif;
   font-size: 0.9em;
   overflow: auto;
+  color: #fbe8a6;
 }
 
 span {
@@ -35,22 +36,18 @@ li {
 }
 
 @media screen and (max-width: 800px) {
-	.parent {
-		padding-left: 1%;
-	    padding-right: 1%;
+	.control-panel {
+       display: sticky !important;
 	}
 	
 	.servlets {
 		min-height: 18.5%;
+		padding-left: 0%;
+		text-align: center;
 	}
 	
-	.control-panel > div > a{
-	    visibility: hidden;
-	}
-	
-	.control-panel > div > a > i {
-	    visibility: visible;
-	    left: 25%;
+	.servlets a{
+	    font-size: 0em;
 	}
 }
 
@@ -64,6 +61,7 @@ header
   display: flex;
   justify-content: space-between;
   background: #303c6c;
+  opacity: 0.8;
   padding: 1%;
 }
 
@@ -120,108 +118,98 @@ header
 Parent
 */
 .parent {
-  display: flex;
+  position: relative;
+  max-width: 1000px;
+  max-height: 1000px;
+  top: 80px;
   margin: auto;
-  max-width: 800px;
-  min-height: 800px;
-  color: #303c6c;
-}
-
-.left-child {
-  width: 20%;
   display: flex;
-  padding-right: 0.5%;
+  justify-content: space-evenly;
 }
 
 .control-panel {
   position: relative;
-  width: 100%;
-  max-height: 240px;
-  top: 80px;
+  width: 19.4%;
+  max-height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  opacity: 0.75;
+}
+
+.servlets {
+  cursor: pointer;
+  background: #303c6c;
+  height: 17%;
+  border-radius: 5px;
+  border-bottom: 2px solid #d2fdff;
+  padding-left: 5%;
+  color: #fbe8a6;
+}
+
+.servlets.active {
+  background: #d2fdff;
+  color: #f4976c;
+}
+
+.servlets:hover {
+  background: #d2fdff;
+  color: #f4976c;
+}
+
+#category-menu {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  outline: none;
+  color: #fbe8a6;
+}
+
+#category-menu:hover {
+  color: #f4976c;
+}
+
+.servlets a {
+  position: relative;
+  text-decoration: none;
+  top: 5%;
+  font-family: "Candal", sans-serif;
+  color: inherit;
 }
 
 .control-panel .material-icons {
   position: relative;
-  top: 7px;
+  top: 25%;
   font-size: 2em;
-}
-
-.servlets {
-  background: #fbe8a6;
-  text-align: left;
-  padding: 5px;
-  height: 17%;
-  border-radius: 5px;
-  border-bottom: 2px solid #ffffff;
-}
-
-.servlets:hover {
-  cursor: pointer;
-  background: #d2fdff;
-}
-
-#category-menu {
-  color:#303c6c;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  font-size: 0.8em;
-  outline: none;
-}
-
-.servlets > a {
-  position: relative;
-  text-decoration: none;
-  font-size: 0.8em;
-  bottom: 10%;
-  left: 5%;
-}
-
-.nav-btn {
-  color: #303c6c;
-}
-
-.nav-btn.active {
-  color: #f4976c;
-}
-
-.right-child {
-  width: 80%;
-  display: flex;
-  padding-left: 0.5%;
 }
 
 .background {
   position: relative;
-  width: 100%;
-  height: 80%;
-  top: 80px;
-  background: #fbe8a6;
+  width: 77.6%;
+  min-height: 800px;
+  background: #303c6c;
   border-radius: 5px;
-  border-bottom: 2px solid #ffffff;
+  border-bottom: 2px solid #d2fdff;
+  opacity: 0.75;
 }
 
 .form {
-  position: relative;
+  width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  padding: 5%;
   overflow: auto;
 }
 
-.form h1 {
-  font-size: 1.2em;
-  padding: 5% 5% 2.5% 5%;
+.form span {
+  font-family: "Candal", sans-serif; 
 }
 
 .info {
-  padding: 0% 5% 2.5% 5%;
+  padding: 5% 0%;
   font-size: 0.8em;
   line-height: 1.6;
   text-align: left;
+  letter-spacing: 0.1em;
 }
 
 .welcome-msg {
@@ -236,18 +224,15 @@ Parent
 }
 
 .welcome-msg p {
-  font-size: 0.8em;
-  line-height: 1.6;
-  text-align: left;
+  font-size: 0.9em;
+  line-height: 1.4;
+  text-align: center;
 }
 
 #login-form {
-  border-left: 1px solid #f4976c;
-  border-right: 1px solid #f4976c;
   position: relative;
-  top: 10%;
-  width: 60%;
-  height: 80%;
+  top: 3%;
+  width: 80%;
   margin: auto;
   padding: 2%;
   border-radius: 0px 0px 9px 9px;
@@ -263,33 +248,32 @@ Parent
 	margin-bottom: 1%;
 	padding: 1%;
 	width: 100%;
+	border-radius: 5px;
 }
 
 #login-form button {
   display: block;
-  border: 1px solid #f4976c;
-  color: #303c6c;
-  border-radius: 3px 3px 3px 3px;
+  border: 2px solid #d2fdff;
+  color: #f4d463;
+  border-radius: 5px;
   cursor: pointer;
   margin: auto;
   background: none;
+  font-family: "Candal", sans-serif;
 }
 
 #login-form button:hover {
-  background: #f4976c;
-  color: #fbe8a6;
+  background: #d2fdff;
+  color: #f4976c;
 }
 
 #login-form #login-btn {
-  position: relative;
-  top: 3%;
-  margin: auto;
-  padding: 2%;
+  margin-top: 3%;
+  padding: 1.5%;
 }
 
 #login-form #register-form-btn {
-  position: relative;
-  top: 6%;
+  margin-top: 3%;
   padding: 2%;
 }
 
@@ -298,23 +282,19 @@ Parent
   font-size: 1.1em;
   position: relative;
   text-align: center;
-  top: 15%;
+  margin-top: 3%;
 }
 
 /*
 Register form
 */
 #register-form {
-  border-left: 1px solid #f4976c;
-  border-right: 1px solid #f4976c;
+  width: 80%;
   position: relative;
-  width: 60%;
-  height: 80%;
-  top: 10%;
+  top: 3%;
   margin: auto;
   overflow: auto;
   padding: 2%;
-  border-radius: 0px 0px 9px 9px;
 }
 
 #register-form label {
@@ -326,32 +306,32 @@ Register form
 	margin-bottom: 1%;
 	padding: 1%;
 	width: 100%;
+	border-radius: 5px;
 }
 
 #register-form button {
   display: block;
-  border: 1px solid #f4976c;
-  color: #303c6c;
-  border-radius: 3px 3px 3px 3px;
+  border: 2px solid #d2fdff;
+  color: #f4d463;
+  border-radius: 5px;
   cursor: pointer;
   background: none;
   margin: auto;
+  font-family: "Candal", sans-serif;
 }
 
 #register-form button:hover {
-  background: #f4976c;
-  color: #fbe8a6;
+  background: #d2fdff;
+  color: #f4976c;
 }
 
 #register-form #register-btn {
-  position: relative;
-  top: 3%;
+  margin-top: 3%;
   padding: 2%;
 }
 
 #register-form #login-form-btn {
-  position: relative;
-  top: 6%;
+  margin-top: 3%;
   padding: 2%;
 }
 
@@ -359,17 +339,16 @@ Register form
   text-align: center;
   font-size: 1.1em;
   color: #ff0000;
-  position: relative;
-  top: 12%;
+  margin-top: 3%;
 }
 
 /*
 Item-list
 */
 .item {
-  background: #fbe8a6;
+  background: #303c6c;
   border-radius: 5px;
-  border-bottom: 2px solid #ffffff;
+  border-bottom: 2px solid #d2fdff;
 }
 
 .item > ul {
@@ -388,28 +367,26 @@ Item-list
   display: flex;
   cursor: pointer;
   align-items: center;
-  border-right: 1px solid #f4976c;
+  border-right: 1px solid #d2fdff;
 }
 
 .item-label:hover{
   background: #d2fdff;
+  color: #f4976c;
 }
 
 .item-label img {
-  border: 1px solid #f4976c;
-	height: 50px;
-	width: 50px;
+  border: 1px solid #d2fdff;
+  height: 50px;
+  width: 50px;
+  opacity: 1;
 }
 
 .item-label span {
   position: relative;
   left: 1%;
-  font-size: 0.8em;
+  font-size: 1em;
   line-height: 1.6;
-}
-
-.description {
-  padding: 1%;
 }
 
 input[type="checkbox"]{
@@ -427,10 +404,13 @@ input[type="checkbox"]:checked ~ ul{
   transform-origin: top;
   transition: transform .2s ease-out;
   transform: scaleY(1);
-  border-right: 1px solid #f4976c;
-  font-size: 0.8em;
-  letter-spacing: 0.05em;
-  line-height: 1.6;
+  border-right: 1px solid #d2fdff;
+  font-size: 0.9em;
+  letter-spacing: 0em;
+  line-height: 1.8;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  padding-right: 1%;
 }
 
 .item-url {
@@ -441,12 +421,12 @@ input[type="checkbox"]:checked ~ ul{
 }
 
 .item-url > a > i {
-	color: rgba(48, 60, 108, 0.75);
-	font-size: 1em;
+	color: #fbe8a6;
+	font-size: 1.2em;
 }
 
 .item-url > a > i:hover {
-	color: #303c6c;
+	color: #f4976c;
 }
 
 .item-fav {
@@ -454,6 +434,7 @@ input[type="checkbox"]:checked ~ ul{
    cursor: pointer;
    position: relative;
    right: 4%;
+   color: #f4d463;
 }
 
 .item-fav > i {
@@ -467,7 +448,7 @@ input[type="checkbox"]:checked ~ ul{
 .notice {
 	text-align: center;
     padding: 5%;
-    color: #f4976c;
+    color: #fbe8a6;
     font-family: "Candal", sans-serif;
     font-size: 1em;
 }

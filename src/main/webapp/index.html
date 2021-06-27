@@ -3,10 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Item Recommendation">
+  <meta name="description" content="Remote Job Recommendation Web App">
   <meta name="author" content="Zack Cheng">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Seek to Remote Lite</title>
+  <link rel="shortcut icon" href="src/job-search.png"/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Candal&family=Noto+Sans+JP&family=Open+Sans:ital,wght@0,300;1,600&display=swap" rel="stylesheet">
@@ -34,8 +35,7 @@
   </header>
   
   <section class="parent">
-    <aside class="left-child">
-      <nav class="control-panel">
+    <section class="control-panel">
         <select id="category-menu" class="servlets">
           <option>Software Development</option>
           <option>Customer Service</option>
@@ -54,43 +54,37 @@
           <option>Medical / Health</option>
           <option>All others</option>
         </select>
-        <div id="explore-btn" class="servlets">
-          <a href="#" class="nav-btn active">
-            <i class="material-icons">explore</i>Explore Openings
-          </a>
+        <div id="explore-btn" class="servlets active">
+          <i class="material-icons">explore</i>
+          <a href="#">Explore Openings</a>
         </div>
         <div id="lottery-btn" class="servlets">
-          <a href="#" class="nav-btn">
-            <i class="material-icons">casino</i>I'm Feeling Lucky
-          </a>
+          <i class="material-icons">casino</i>
+          <a href="#">I'm Feeling Lucky</a>
         </div>
         <div id="favorite-btn" class="servlets">
-          <a href="#" class="nav-btn">
-            <i class="material-icons">star</i>My Favorites
-          </a>
+          <i class="material-icons">star</i>
+          <a href="#">My Favorites</a>
         </div>
         <div id="recommend-btn" class="servlets">
-          <a href="#" class="nav-btn">
-            <i class="material-icons">recommend</i>Recommendation
-          </a>
+          <i class="material-icons">recommend</i>
+          <a href="#">Recommendation</a>
         </div>
-      </nav>
-    </aside>
+    </section>
     
-    <section class="right-child">
-      <section class="background">
-        <section id="contact-info" class="form">
-          <h1>Contact:</h1>
-          <article class="info">
-            <p>Author: Zack Tsai-Tzu Cheng</p>
-            <p>Email: zacktcheng@gmail.com</p>
-            <p>Tel: 323-774-3166</p>
-            <p>Github: https://github.com/zacktcheng</p>
-          </article>
-        </section>
+    <section class="background">
+      <section id="contact-info" class="form">
+        <span>Contact:</span>
+        <article class="info">
+          <p>Author: Zack Tsai-Tzu Cheng</p>
+          <p>Email: zacktcheng@gmail.com</p>
+          <p>Tel: 323-774-3166</p>
+          <p>Github: https://github.com/zacktcheng</p>
+        </article>
+      </section>
         
         <section id="about-info" class="form">
-          <h1>About:</h1>
+          <span>About:</span>
           <article class="info">
             <p>
             	Seek to Remote Lite, as its name implies, is a lite weight remote job recommendation web application.<br>
@@ -172,7 +166,7 @@
 					</span>
                 </label>
                 <ul>
-                  <li class="description">
+                  <li>
                     This is the job description.
                   </li>
                 </ul>
@@ -188,7 +182,6 @@
         </ul>
       </section>
     </section>
-  </section>
   <script src="https://rawgit.com/emn178/js-md5/master/build/md5.min.js"></script>
   <script src="scripts/main.js"></script>
 </body>

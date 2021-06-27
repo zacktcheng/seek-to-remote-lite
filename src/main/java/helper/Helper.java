@@ -14,6 +14,10 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 public class Helper {
 	
 	private static final Set<String> BUSINESS_ENTITY_SET = getBusinessEntitySet();
@@ -42,7 +46,6 @@ public class Helper {
 		while ((line = reader.readLine()) != null) {
 			requestBody.append(line);
 		}
-
 		return new JSONObject(requestBody.toString());
 	}
 
@@ -63,13 +66,12 @@ public class Helper {
 		JSONArray array = favoriteItem.getJSONArray("keywords");
 	
 		for(int i = 0; i < array.length(); i++) { keywords.add(array.getString(i)); }
-			
+		
 		item.setKeywords(keywords);
 		return item;
 	}
 
 	public static String getStringFieldOrEmpty(JSONObject obj, String field) {
-		
 		return obj.isNull(field) ? "" : obj.get(field).toString();
 	}
 	
@@ -88,7 +90,6 @@ public class Helper {
 			// Determination: if the last substring can be fond in BUSINESS_ENTITY_SET.
 			// We don't want to include the suffix because it will rule out the company logo url search result.
 			if(i < substrings.length - 1 || !BUSINESS_ENTITY_SET.contains(substrings[i])) {
-			
 				keyword += substrings[i];
 			}
 		}
@@ -114,14 +115,37 @@ public class Helper {
         // Return false if there was an Exception while creating an URL object.
         catch (Exception ignore) { return false; }
     }
-	
+
 	public static String getPlainTextFromHTMLFormatText(String htmlFormatText) {
 		
+		String plainText = "";
+		
 		if(htmlFormatText != null && !htmlFormatText.trim().isEmpty()) {
-			// Replace all occurrences of one or more HTML tags with optional
-			// whitespace in between with a single space character. 
-			return htmlFormatText.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
+			// Replace "\n" with "".
+			htmlFormatText = htmlFormatText.replaceAll("\\n", "");
+			Document document = Jsoup.parse(htmlFormatText);
+			Elements lis = document.select("li");
+			
+			if(lis.size() > 0) {
+				StringBuilder builder = new StringBuilder();
+
+				for(int i = 0; i < lis.size(); i++) {
+					// Get all texts within.
+					// visit: https://jsoup.org/cookbook/extracting-data/attributes-text-html.
+					if(lis.get(i).hasText()) {
+						String compoundText = lis.get(i).text();
+						
+						if(!compoundText.trim().isEmpty()) {
+							String sentence = "- " + compoundText;
+							
+							if(!sentence.substring(sentence.length() - 1).equals(".")) sentence += ".";
+							builder.append(sentence + " ");
+						}
+					}
+				}
+				if(builder.toString() != null) plainText = builder.toString();
+			}
 		}
-		return "";
+		return plainText;
 	}
 }

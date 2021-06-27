@@ -4,7 +4,6 @@
    * Variables
    */
   var user_id = '1111';
-  var user_name = 'John';
   var category = 'Software Development'; 
   var tempFavItems = {};
   
@@ -72,7 +71,7 @@
 
   function onSessionValid(result) {
     user_id = result.user_id;
-    
+    document.querySelector('.control-panel').style.display = 'flex';
     hideElement(contactInfo);
     hideElement(aboutInfo);
     hideElement(loginForm);
@@ -92,6 +91,7 @@
   }
 
   function onSessionInvalid() {
+    document.querySelector('.control-panel').style.display = 'none';
   	hideElement(contactBtn);
     hideElement(aboutBtn);
     hideElement(logoutBtn);
@@ -111,6 +111,7 @@
   }
   
   function showRegisterForm() {
+    document.querySelector('.control-panel').style.display = 'none';
   	hideElement(contactBtn);
     hideElement(aboutBtn);  
     hideElement(logoutBtn);
@@ -131,6 +132,7 @@
   
   function showContactInfo() {
     let initSec = initSessionAndprocessFavItems('Saving user updates...');
+    activeBtn('');
   	
   	setTimeout(function() {
   	  hideElement(aboutInfo);
@@ -150,6 +152,7 @@
   
   function showAboutInfo() {
     let initSec = initSessionAndprocessFavItems('Saving user updates...');
+    activeBtn('');
     
   	setTimeout(function() {
   	  hideElement(contactInfo);
@@ -346,43 +349,32 @@
   
   function initSessionAndprocessFavItems(msg) {
     // Initiate a session with empty background.
-    let itemList = document.getElementById('item-list');
-    itemList.innerHTML = ''; // clear current results
+    document.getElementById('item-list').innerHTML = '';
     
     // Process remaining items then reset array empty. 
     let itemsNum = toggleTempFavItemsAtBackEnd();
-    
+
     // Print out loading message to notify the end user when itemsNum > 0.
     if(itemsNum > 0 && typeof msg === 'string') {
   	  showLoadingMessage(msg);
   	}
   	return itemsNum; // Will be passed as initSec to let ajax function await.
   }
-  
-  /**
-   * A helper function activates nav-btn class of child element of input element
-   *
-   * @param btnId - The id of the input element
-   */
-  function activeBtn(parentId) {
+
+  function activeBtn(btnId) {
     let servlets = document.getElementsByClassName('servlets');
-    
+
     for(let i = 0; i < servlets.length; i++) {
       
-      if(servlets[i].id && servlets[i].id.includes('btn')) {
-        let button = servlets[i];
+      if(servlets[i].id !== 'category-menu') {
         
-        if(button.children.length > 0 && button.children[0].nodeName === 'A') {
-          let link = button.children[0];
-          
-          if(button.id === parentId && link.className === 'nav-btn') {
-            link.className = 'nav-btn active'; 
-          }
-          else if(button.id !== parentId && link.className === 'nav-btn active') {
-            link.className = 'nav-btn';
-          }
+        if(servlets[i].id === btnId) {
+          servlets[i].className = 'servlets active'; 
         }
-      }  
+        else {
+          servlets[i].className = 'servlets';
+        }
+      }
     }
   }
 
@@ -464,6 +456,7 @@
     let initSec = initSessionAndprocessFavItems('Saving user updates...');
     hideElement(contactInfo);
     hideElement(aboutInfo);
+    showElement(itemList);
     activeBtn('explore-btn');
 
     setTimeout(function() {
@@ -503,6 +496,7 @@
   	let initSec = initSessionAndprocessFavItems('Saving user updates...');
     hideElement(contactInfo);
     hideElement(aboutInfo);
+    showElement(itemList);
     activeBtn('lottery-btn');
     
     setTimeout(function() {
@@ -542,6 +536,7 @@
   	let initSec = initSessionAndprocessFavItems('Saving user updates...');
   	hideElement(contactInfo);
     hideElement(aboutInfo);
+    showElement(itemList);
     activeBtn('favorite-btn');
  
     setTimeout(function() {
@@ -578,6 +573,7 @@
   	let initSec = initSessionAndprocessFavItems('Saving user updates...');
   	hideElement(contactInfo);
     hideElement(aboutInfo);
+    showElement(itemList);
     activeBtn('recommend-btn');
     
     setTimeout(function() {
@@ -660,7 +656,7 @@
   function listItems(items) {
     let itemList = document.getElementById('item-list');
     itemList.innerHTML = ''; // clear current results
-	
+	console.log('inside listItems.');
     for(let i = 0; i < items.length; i++) { addItem(itemList, items[i]); }
   }
 
@@ -683,7 +679,7 @@
          </span>
         </label>
         <ul>
-           <li class="description">
+           <li>
              This is the job description.
            </li>
         </ul>
@@ -710,15 +706,14 @@
     
     // Optional attributes.
     let item_companyLogoUrl = './src/no-image-icon-23485.jpg';
+    let item_description = 'For more info of this job post, please click on the url link by the star button.'
     
     if(typeof item.companyLogoUrl !== 'undefined' && item.companyLogoUrl) {
       item_companyLogoUrl = item.companyLogoUrl;
     }
     
-    let item_description = 'For more info of this job post, please click on the url link by the star button.'
-    
     if(typeof item.description !== 'undefined' && item.description) {
-      item_description = item.description;
+      item_description = item.description.replace(/\. \-/g, '.<br> -');
     }
     
     // Check if item contains 'favorite' key. Each recommended item doesn't contain 'favorite' key.
@@ -739,7 +734,7 @@
     label.appendChild(logo);
     label.appendChild(titleAndCompanyName);
     // Create description element <li>.
-    let description = $create('li', { class: 'description' }, item_description);
+    let description = $create('li', {}, item_description);
     // Create desList element <ul> to host description.
     let desList = $create('ul', {}, '');
     desList.appendChild(description);
@@ -789,6 +784,7 @@
     
     // Append root to itemList.
     itemList.appendChild(root);
+    console.log('inside create item.');
   }
   
   init();

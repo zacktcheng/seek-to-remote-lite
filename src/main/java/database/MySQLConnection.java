@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,7 +12,6 @@ import java.util.Set;
 import entity.Item;
 import entity.Item.Builder;
 import external.TextRazorClient;
-import helper.Helper;
 
 public class MySQLConnection {
 	
@@ -81,17 +81,12 @@ public class MySQLConnection {
 		
 		// Extract keywords from the description and store them in a HashSet to use in future. 
 		// Keywords are used for keyword-description matching while processing recommendItems().
-		List<String> keywords = null;
-		String descriptionInPlainText = "";
+		List<String> keywords = new ArrayList<>();
 
-		if(item.getDescription() != null && !item.getDescription().trim().isEmpty()) {
-			String descriptionInHTML = item.getDescription();
-			descriptionInPlainText = Helper.getPlainTextFromHTMLFormatText(descriptionInHTML).trim();
-
+		if(!item.getDescription().isEmpty()) {
 			// Extract keywords from description.
-			keywords = TextRazorClient.extractKeywords(descriptionInPlainText, 10);
+			keywords = TextRazorClient.extractKeywords(item.getDescription(), 10);
 		}
-
 		String sql = "INSERT IGNORE INTO items VALUES (?, ?, ?, ?, ?, ?, ?)";
 		
 		try {
@@ -102,16 +97,20 @@ public class MySQLConnection {
 			prepStatement.setString(4, item.getCategory());
 			prepStatement.setString(5, item.getUrl());
 			prepStatement.setString(6, item.getCompanyLogoUrl());
-			prepStatement.setString(7, descriptionInPlainText);
+			prepStatement.setString(7, item.getDescription());
 			prepStatement.executeUpdate();
 			
 			sql = "INSERT IGNORE INTO keywords VALUES (?, ?)";
             prepStatement = conn.prepareStatement(sql);
 			prepStatement.setString(1, item.getItemId());
-			
-			for(String keyword : keywords) {
-				prepStatement.setString(2, keyword);
-				prepStatement.executeUpdate();
+
+			if(keywords.size() > 0) {
+				for(String keyword : keywords) {
+					if(keyword != null && !keyword.trim().isEmpty()) {
+						prepStatement.setString(2, keyword);
+						prepStatement.executeUpdate();
+					}
+				}
 			}
 		} 
 		catch(SQLException e) { e.printStackTrace(); }
