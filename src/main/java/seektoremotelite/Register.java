@@ -16,20 +16,22 @@ import helper.Helper;
  */
 public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Register() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	public Register() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		JSONObject input = Helper.readJSONObject(request);
 		String userId = input.getString("user_id");
 		String password = input.getString("password");
@@ -39,10 +41,12 @@ public class Register extends HttpServlet {
 		MySQLConnection connection = new MySQLConnection();
 		JSONObject object = new JSONObject();
 		boolean canAddUser = connection.addUser(userId, password, firstName, lastName);
-		
-		if(canAddUser) object.put("status", "OK");
-		else object.put("status", "User Already Exists");
-		
+
+		if (canAddUser) {
+			object.put("status", "OK");
+		} else {
+			object.put("status", "User Already Exists");
+		}
 		connection.close();
 		Helper.writeJsonObject(response, object);
 	}

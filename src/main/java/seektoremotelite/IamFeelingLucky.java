@@ -23,47 +23,50 @@ import helper.Helper;
  */
 public class IamFeelingLucky extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public IamFeelingLucky() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		// Assure the session's already logged-in before any searching. 
+	public IamFeelingLucky() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		// Assure the session's already logged-in before any searching.
 		HttpSession session = request.getSession(false);
-	
-		if(session == null) {	
+
+		if (session == null) {
 			response.setStatus(403);
 			return;
 		}
-				
+
 		// Search to obtain job posts.
 		String userId = request.getParameter("user_id");
 		String category = request.getParameter("category");
-				
+
 		RemotiveClient remotiveClient = new RemotiveClient();
 		remotiveClient.isRandomized = true;
-		List<Item> items = remotiveClient.search(category);	
+		List<Item> items = remotiveClient.search(category);
 		MySQLConnection connection = new MySQLConnection();
 		Set<String> favoritedItemIds = connection.getFavoriteItemIds(userId);
 		connection.close();
-				
+
 		JSONArray array = new JSONArray();
 
-		for(Item item : items) { 	
+		for (Item item : items) {
 			JSONObject object = item.toJSONObject();
-			// Put "favorite" to let the front-end code to turn on the indicator which tells the user that the item has been saved.
+			// Put "favorite" to let the front-end code to turn on the indicator which tells
+			// the user that the item has been saved.
 			object.put("favorite", favoritedItemIds.contains(item.getItemId()));
-			array.put(item.toJSONObject()); 
-		}		
+			array.put(item.toJSONObject());
+		}
 		Helper.writeJsonArray(response, array);
 	}
 
