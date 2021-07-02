@@ -7,7 +7,7 @@
 body {
   height: 100vh;
   width: 100vw; 
-  background-image: linear-gradient(rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.75)), url("../src/st3.depositphotos.com_depositphotos_192041854-vector-profession-seamless.jpg"); 
+  background-image: linear-gradient(rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.75)), url("../src/dark-vector-profession-seamless.jpg"); 
   font-family: 'Sulphur Point', sans-serif;
   padding: 0vh 25vw;
   display: flex;
@@ -17,7 +17,7 @@ body {
 
 main {
   height: 85%;
-  box-shadow: 0 0 15px #313335;
+  box-shadow: 5px 5px 15px #86888a;
   border-radius: 20px;
 }
 
@@ -30,6 +30,10 @@ main > header {
   justify-content: center;
   flex-direction: column;
   border-radius: 20px 20px 0 0;
+  border-top: 2px solid #73afce;
+  border-left: 2px solid #73afce;
+  border-right: 2px solid #0077b5;
+  border-bottom: 3px solid #0077b5;
 }
 
 .title {
@@ -122,7 +126,9 @@ main > section {
   background: rgba(255, 255, 255, 0.5);
   height: 75%;
   padding: 5%;
-  overflow: hidden;
+  overflow: auto;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #caccce;
 }
 
 ul { list-style: none; }
@@ -140,7 +146,7 @@ li { list-style: none; }
   border-bottom: 2px solid #ffffff;
   border-left: 2px solid #caccce;
   border-top: 2px solid #caccce;
-  border-right: 2px solid #caccce;
+  border-right: 2px solid #ffffff;
 }
 
 .item {
@@ -289,7 +295,7 @@ input[type="checkbox"]:checked ~ ul {
   border-bottom: 2px solid #ffffff;
   border-left: 2px solid #caccce;
   border-top: 2px solid #caccce;
-  border-right: 2px solid #caccce;
+  border-right: 2px solid #ffffff;
 }
 
 #login-form {
@@ -398,6 +404,10 @@ main > footer {
   background: rgba(0, 119, 181, 0.75);
   height: 7.5%;
   border-radius: 0 0 20px 20px;
+  border-top: 3px solid #73afce;
+  border-left: 2px solid #73afce;
+  border-right: 2px solid #0077b5;
+  border-bottom: 2px solid #0077b5;
 }
 
 @media screen and (max-width: 800px) {
@@ -413,6 +423,9 @@ main > footer {
   main > header {
     border-radius: 0;
     justify-content: center;
+    border-top: none;
+    border-left: none;
+    border-right: none;
   }
   
   .title {
@@ -486,6 +499,8 @@ main > footer {
   
   main > section {
     height: 82.5%;
+    border-left: none;
+    border-right: none;
   }
   
   main > footer { 
