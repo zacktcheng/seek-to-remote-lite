@@ -66,9 +66,11 @@
                 if (result.status === 'OK') {
                     onSessionValid(result);
                 }
-            }, function() {
+            }, 
+            function() {
                 console.log('login error')
-            });
+            }
+        );
     }
 
     function onSessionValid(result) {
@@ -152,8 +154,8 @@
     // -----------------------------------
 
     function login() {
-        let initSec = initSessionAndprocessFavItems('Logging in...');
-
+        clearLoginError();
+        showPending('login-form', 'login-pending');
         let username = document.querySelector('#username').value;
         let password = document.querySelector('#password').value;
         password = md5(username + md5(password));
@@ -165,21 +167,23 @@
             password: password,
         });
 
-        setTimeout(function() {
-            ajax('POST', url, req,
-                // successful callback
-                function(res) {
-                    let result = JSON.parse(res);
+        ajax('POST', url, req,
+            // successful callback
+            function(res) {
+                let result = JSON.parse(res);
 
-                    // successfully logged in
-                    if (result.status === 'OK') { onSessionValid(result); }
-                },
-
-                // error
-                function() {
-                    showLoginError();
-                });
-        }, 1500 * initSec);
+                // successfully logged in
+                if (result.status === 'OK') {
+                    clearPending('login-pending'); 
+                    onSessionValid(result); 
+                }
+            },
+            // error
+            function() {
+                clearPending('login-pending');
+                showLoginError();
+            }
+        );
     }
 
     function showLoginError() {
@@ -199,20 +203,25 @@
     // -----------------------------------
 
     function register() {
+        clearRegisterResult();
+        showPending('register-form', 'register-pending');
+        
         let username = document.getElementById('register-username').value;
         let password = document.getElementById('register-password').value;
         let firstName = document.getElementById('register-first-name').value;
         let lastName = document.getElementById('register-last-name').value;
 
         if(username === "" || password === "" || firstName === "" || lastName === "") {
+            clearPending('register-pending');
             showRegisterResult('Please fill in all fields.');
             return;
         }
         if(username.match(/^[a-z0-9]+$/i) === null) {
+            clearPending('register-pending');
             showRegisterResult('Invalid username.');
             return
         }
-
+        
         password = md5(username + md5(password));
 
         // The request parameters
@@ -231,17 +240,20 @@
 
                 // successfully logged in
                 if (result.status === 'OK') {
+                    clearPending('register-pending');
                     showRegisterResult('Registered successfully!');
                 }
                 else {
-                    showRegisterResult('User already existed!');
+                    clearPending('register-pending');
+                    showRegisterResult('User\'s already existed!');
                 }
             },
-
             // error
             function() {
+                clearPending('register-pending');
                 showRegisterResult(false);
-            });
+            }
+        );
     }
 
     function showRegisterResult(registerMsg) {
@@ -291,7 +303,8 @@
                 // error
                 function() {
                     showErrorMessage('Failed to logout.');
-                });
+                }
+            );
         }, 1500 * initSec);
     }
 
@@ -309,12 +322,27 @@
         if(element === null) throw 'element is null';
         element.style.display = 'none';
     }
+    
+    function showPending(parentId, childId) {
+        let parent = document.getElementById(parentId);
+        let child = $create('i', 
+        {
+          id: childId,
+          class: 'fa fa-spinner fa-spin'
+        }, '');
+        parent.appendChild(child);
+    }
+    
+    function clearPending(childId) {
+       let child = document.getElementById(childId);
+       child.parentNode.removeChild(child);
+
+    }
 
     function getCategory() {
         toggleTempFavItemsAtBackEnd();
         let element = document.getElementById("category-menu");
         category = element.options[element.selectedIndex].text;
-        console.log('tempFavItems length: ' + Object.keys(tempFavItems).length + '. Last selected category: ' + category);
     }
 
     function toggleFavItem(item) {
@@ -473,7 +501,8 @@
                 // failed callback
                 function() {
                     showErrorMessage('Cannot load openings.');
-                });
+                }
+            );
         }, 1500 * initSec);
     }
 
@@ -512,7 +541,8 @@
                 // failed callback
                 function() {
                     showErrorMessage('Cannot load random openings.');
-                });
+                }
+            );
         }, 1500 * initSec);
     }
 
@@ -536,19 +566,21 @@
             let req = JSON.stringify({});
 
             // make AJAX call
-            ajax('GET', url + '?' + params, req, function(res) {
-                let items = JSON.parse(res);
+            ajax('GET', url + '?' + params, req, 
+                function(res) {
+                    let items = JSON.parse(res);
 
-                if (!items || items.length === 0) {
-                    showWarningMessage('No favorite job post.');
-                }
-                else {
-                    listItems(items);
-                }
-            },
+                    if (!items || items.length === 0) {
+                        showWarningMessage('No favorite job post.');
+                    }
+                    else {
+                        listItems(items);
+                    }
+                },
                 function() {
                     showErrorMessage('Cannot load favorite job posts.');
-                });
+                }
+            );
         }, 1500 * initSec);
     }
 
@@ -586,7 +618,8 @@
                 // failed callback
                 function() {
                     showErrorMessage('Cannot load recommended jobs.');
-                });
+                }
+            );
         }, 1500 * initSec);
     }
 
@@ -623,7 +656,8 @@
                     if (result.status === 'OK' || result.result === 'SUCCESS') {
                         console.log(key + ' result.status: ' + result.status + ' result.result: ' + result.result);
                     }
-                });
+                }
+            );
         }
         tempFavItems = {};
         console.log('tempFavItems length: ' + Object.keys(tempFavItems).length);

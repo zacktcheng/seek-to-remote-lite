@@ -46,9 +46,7 @@ main > header {
   font-family: 'Josefin Sans', sans-serif;
 }
 
-.seek-to-remote {
-  font-size: 2em;
-}
+.seek-to-remote { font-size: 2em; }
 
 .lite {
   display: inline-block;
@@ -67,9 +65,7 @@ main > header {
   align-items: center;
 }
 
-#pc-navigator > div > span {
-  display: inline-block;
-}
+#pc-navigator > div > span { display: inline-block; }
 
 .buttons {
   cursor: pointer;
@@ -112,9 +108,7 @@ main > header {
   background: #73afce;
 }
 
-#mobile-navigator {
-  display: none;
-}
+#mobile-navigator { display: none; }
 
 #mobile-navigator > div > i {
   display: block;
@@ -163,9 +157,7 @@ li { list-style: none; }
   align-items: center;
 }
 
-.item-job {
-    width: 85%;
-}
+.item-job { width: 85%; }
 
 .item-label {
   display: flex;
@@ -213,39 +205,29 @@ li { list-style: none; }
   text-align: center;
 }
 
-.fa-external-link {
-  color: #86888a;
-}
+.fa-external-link { color: #86888a; }
 
-.fa-external-link:hover {
-  color: #fdba21;
-}
+.fa-external-link:hover { color: blue; }
 
 .item-fav {
   width: 7.5%;
   text-align: center;
 }
 
-.fa-star-o {
-  color: #86888a;
-}
+.fa-star-o { color: #86888a; }
 
-.fa-star-o:hover {
-  color: #fdba21;  
-}
+.fa-star-o:hover { color: #fdba21; }
 
-.fa-star {
-  color: #fdba21;
-}
+.fa-star { color: #fdba21; }
 
 input[type="checkbox"] {
-    position: absolute;
-    left: -9999px;
+  position: absolute;
+  left: -9999px;
 }
 
 input[type="checkbox"] ~ ul {
-    height: 0;
-    transform: scaleY(0);
+  height: 0;
+  transform: scaleY(0);
 }
 
 input[type="checkbox"]:checked ~ ul {
@@ -264,7 +246,7 @@ input[type="checkbox"]:checked ~ ul {
 .notice {
   padding: 10%;
   text-align: center;
-  color: #0077b5;
+  color: #00a0dc;
   font-family: 'Josefin Sans', sans-serif;
   font-size: 1.5em;
 }
@@ -341,9 +323,7 @@ input {
   margin: 5px 0;
 }
 
-input:focus {
-  outline: none !important;
-}
+input:focus { outline: none !important; }
 
 .form-btns {
   min-width: 250px;
@@ -372,16 +352,10 @@ button:hover {
   color: #00a0dc;
 }
 
-.error-message {
+#login-pending { 
   margin-top: 20px;
-  width: 300px;
-  border-radius: 20px;
-  padding: 5px 0;
-  background: #f06112;
-  font-family: 'Josefin Sans', sans-serif;
-  font-size: 1.5em;
-  color: #ffffff;
-  text-align: center;
+  font-size: 2em;
+  color: #00a0dc;
 }
 
 #register-form {
@@ -400,6 +374,24 @@ button:hover {
   margin-bottom: 10px;
 }
 
+.message {
+  margin-top: 20px;
+  width: 300px;
+  border-radius: 20px;
+  padding: 5px 0;
+  background: #f06112;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1.5em;
+  color: #ffffff;
+  text-align: center;
+}
+
+#register-pending { 
+  margin-top: 20px;
+  font-size: 2em;
+  color: #00a0dc;
+}
+
 main > footer {
   background: rgba(0, 119, 181, 0.75);
   height: 7.5%;
@@ -411,9 +403,7 @@ main > footer {
 }
 
 @media screen and (max-width: 800px) {
-  body { 
-    padding: 0vh 0vw; 
-  } 
+  body { padding: 0vh 0vw; } 
   
   main { 
     min-height: 100%;
@@ -428,13 +418,9 @@ main > footer {
     border-right: none;
   }
   
-  .title {
-    margin: 0;
-  }
+  .title { margin: 0; }
   
-  .item-label {
-    border: none;
-  }
+  .item-label { border: none; }
   
   .item-label > span {
     padding: 0;
@@ -446,30 +432,20 @@ main > footer {
     background: none;
   }
   
-  .item-companyName {
-    display: none;
-  }
+  .item-companyName { display: none; }
   
-  input[type="checkbox"]:checked ~ ul {
-    border: none;
-  }
+  input[type="checkbox"]:checked ~ ul { border: none; }
   
-  .buttons.active {
-    padding: 0;
-  }
+  .buttons.active { padding: 0; }
   
-  .buttons {
-    padding: 0;
-  }
+  .buttons { padding: 0; }
   
   #pc-navigator {
     width: 300px;
     margin: 0.5em;
   }
 
-  #pc-navigator > div > span {
-    margin: 0.25em;
-  }
+  #pc-navigator > div > span { margin: 0.25em; }
   
   #mobile-navigator {
     display: flex;
@@ -477,25 +453,15 @@ main > footer {
     justify-content: center;
   }
   
-  #category-menu {
-    padding: 0.35em;
-  }
+  #category-menu { padding: 0.35em; }
   
-  #pc-explore-btn {
-    display: none;
-  }
+  #pc-explore-btn { display: none; }
   
-  #pc-lottery-btn {
-    display: none;
-  }
+  #pc-lottery-btn { display: none; }
   
-  #pc-favorite-btn {
-    display: none;
-  }
+  #pc-favorite-btn { display: none; }
   
-  #pc-recommend-btn {
-    display: none;
-  }
+  #pc-recommend-btn { display: none; }
   
   main > section {
     height: 82.5%;
