@@ -41,7 +41,7 @@ public class RemotiveClient {
 	public List<Item> search(String category) {
 
 		String categorySlug = getCategorySlug(category, true);
-		String limit = "10";
+		String limit = "20";
 
 		if (isBulkSearch || isRandomized) limit = "100";
 
@@ -77,8 +77,7 @@ public class RemotiveClient {
 		return new ArrayList<>();
 	}
 
-	// Help to create a list of items for each JSONObject in the response JSONArray
-	// above to return.
+	// Help to create a list of items for each JSONObject in the response JSONArray above to return.
 	public List<Item> getItemList(JSONArray array) {
 
 		List<Item> itemList = new ArrayList<>();
@@ -133,8 +132,14 @@ public class RemotiveClient {
 				.title(Helper.getStringFieldOrEmpty(object, "title"))
 				.companyName(Helper.getStringFieldOrEmpty(object, "company_name"))
 				.category(Helper.getStringFieldOrEmpty(object, "category"))
-				.url(Helper.getStringFieldOrEmpty(object, "url")).companyLogoUrl(companyLogoUrl)
-				.description(descriptionInPlainText).build();
+				.url(Helper.getStringFieldOrEmpty(object, "url"))
+				.companyLogoUrl(companyLogoUrl)
+                .jobType(Helper.getStringFieldOrEmpty(object, "job_type"))
+                .date(Helper.getStringFieldOrEmpty(object, "publication_date"))
+                .location(Helper.getStringFieldOrEmpty(object, "candidate_required_location"))
+                .salary(Helper.getStringFieldOrEmpty(object, "salary"))
+				.description(descriptionInPlainText)
+				.build();
 
 		return item;
 	}

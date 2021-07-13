@@ -58,7 +58,12 @@ public class Helper {
 				.category(getStringFieldOrEmpty(favoriteItem, "category"))
 				.url(getStringFieldOrEmpty(favoriteItem, "url"))
 				.companyLogoUrl(getStringFieldOrEmpty(favoriteItem, "companyLogoUrl"))
-				.description(getStringFieldOrEmpty(favoriteItem, "description")).build();
+				.jobType(getStringFieldOrEmpty(favoriteItem, "jobType"))
+				.date(getStringFieldOrEmpty(favoriteItem, "date"))
+				.location(getStringFieldOrEmpty(favoriteItem, "location"))
+				.salary(getStringFieldOrEmpty(favoriteItem, "salary"))
+				.description(getStringFieldOrEmpty(favoriteItem, "description"))
+				.build();
 
 		Set<String> keywords = new HashSet<>();
 		JSONArray array = favoriteItem.getJSONArray("keywords");
@@ -79,8 +84,7 @@ public class Helper {
 
 		String companyName = object.get("company_name").toString();
 
-		// Replace all special characters with white spaces, then split it into
-		// substrings.
+		// Replace all special characters with white spaces, then split it into substrings.
 		companyName = companyName.replaceAll("[^a-zA-Z0-9]", " ").toLowerCase();
 		String[] substrings = companyName.split(" ");
 		String keyword = "";
@@ -89,8 +93,7 @@ public class Helper {
 		for (int i = 0; i < substrings.length; i++) {
 			// Check whether to exclude the company suffix.
 			// Determination: if the last substring can be fond in BUSINESS_ENTITY_SET.
-			// We don't want to include the suffix because it will rule out the company logo
-			// url search result.
+			// We don't want to include the suffix because it will rule out the company logo url search result.
 			if (i < substrings.length - 1 || !BUSINESS_ENTITY_SET.contains(substrings[i])) {
 				keyword += substrings[i];
 			}

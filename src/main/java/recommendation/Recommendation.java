@@ -31,8 +31,7 @@ public class Recommendation {
 		}
 
 		// Step 3. Get all keywords of favorite items, sort by count.
-		// For example: {"JavaScript": 6, "Information technology": 4, "React (web
-		// framework)": 3, "Computing": 1}.
+		// For example: {"JavaScript": 6, "Information technology": 4, "React (web framework)": 3, "Computing": 1}.
 		Map<String, Integer> allKeywords = new HashMap<>();
 
 		for (String itemId : favoriteItemIds) {
@@ -55,8 +54,7 @@ public class Recommendation {
 		if (keywordEntries.size() > 5) keywordEntries = keywordEntries.subList(0, 5);
 
 		// Step 4. Start a new search of the category.
-		// Then match keywords with the description in latest search items to collect
-		// recommendedItems.
+		// Then match keywords with the description in latest search items to collect recommendedItems.
 		RemotiveClient remotiveClient = new RemotiveClient();
 		remotiveClient.isBulkSearch = true;
 		List<Item> rawSearchItems = remotiveClient.search(category);

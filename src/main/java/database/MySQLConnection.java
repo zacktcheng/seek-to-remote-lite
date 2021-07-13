@@ -96,7 +96,7 @@ public class MySQLConnection {
 			// Extract keywords from description.
 			keywords = TextRazorClient.extractKeywords(item.getDescription(), 10);
 		}
-		String sql = "INSERT IGNORE INTO items VALUES (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT IGNORE INTO items VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try {
 			PreparedStatement prepStatement = conn.prepareStatement(sql);
@@ -106,7 +106,11 @@ public class MySQLConnection {
 			prepStatement.setString(4, item.getCategory());
 			prepStatement.setString(5, item.getUrl());
 			prepStatement.setString(6, item.getCompanyLogoUrl());
-			prepStatement.setString(7, item.getDescription());
+			prepStatement.setString(7, item.getJobType());
+			prepStatement.setString(8, item.getDate());
+			prepStatement.setString(9, item.getlocation());
+			prepStatement.setString(10, item.getSalary());
+			prepStatement.setString(11, item.getDescription());
 			prepStatement.executeUpdate();
 
 			sql = "INSERT IGNORE INTO keywords VALUES (?, ?)";
@@ -180,6 +184,10 @@ public class MySQLConnection {
 					builder.category(resultSet.getString("category"));
 					builder.url(resultSet.getString("url"));
 					builder.companyLogoUrl(resultSet.getString("company_logo_url"));
+					builder.jobType(resultSet.getString("job_type"));
+					builder.date(resultSet.getString("publication_date"));
+					builder.location(resultSet.getString("required_location"));
+					builder.salary(resultSet.getString("salary"));
 					builder.description(resultSet.getString("description"));
 					builder.keywords(getKeywords(itemId));
 					favoriteItems.add(builder.build());

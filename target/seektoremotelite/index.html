@@ -5,159 +5,211 @@
   <meta charset="UTF-8">
   <meta name="description" content="Remote Job Recommendation Web App">
   <meta name="author" content="Zack Cheng">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
   <title>Seek to Remote Lite</title>
   <link rel="shortcut icon" href="src/job-search.png"/>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400&family=Sulphur+Point:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&family=Quicksand:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="styles/main.css">
 </head>
 
 <body>
-  <main>
-    <header>
+  <header>
+    <section>
       <div class="title">
-        <span class="seek-to-remote">Seek to Remote </span>
+        <span class="seek-to-remote">Seek to Remote</span>
         <span class="lite">Lite</span>
       </div>
-      <nav id="pc-navigator">
-        <select id="category-menu" class="buttons">
-          <option>Software Development</option>
-          <option>Customer Service</option>
-          <option>Design</option>
-          <option>Marketing</option>
-          <option>Sales</option>
-          <option>Product</option>
-          <option>Business</option>
-          <option>Data</option>
-          <option>DevOps / Sysadmin</option>
-          <option>Finance / Legal</option>
-          <option>Human Resources</option>
-          <option>QA</option>
-          <option>Writing</option>
-          <option>Medical / Health</option>
-          <option>All others</option>
-        </select>
-        <div id="pc-explore-btn" class="buttons active">
-          <span>Explore Openings</span>
-        </div>
-        <div id="pc-lottery-btn" class="buttons">
-          <span>I'm Feeling Lucky</span>
-        </div>
-        <div id="pc-favorite-btn" class="buttons">
-          <span>My Favorites</span>
-        </div>
-        <div id="pc-recommend-btn" class="buttons">
-          <span>Recommendation</span>
-        </div>
-        <div id="about-btn" class="buttons">
-          <span>About</span>
-        </div>
-        <div id="logout-btn" class="buttons">
-          <span>Logout</span>
-        </div>
-      </nav>
-      <nav id="mobile-navigator">
-        <div id="mobile-explore-btn" class="buttons active">
-          <i class="material-icons">explore</i>
-        </div>
-        <div id="mobile-lottery-btn" class="buttons">
-          <i class="material-icons">casino</i>
-        </div>
-        <div id="mobile-favorite-btn" class="buttons">
-          <i class="material-icons">star</i>
-        </div>
-        <div id="mobile-recommend-btn" class="buttons">
-          <i class="material-icons">recommend</i>
-        </div>
-      </nav>
-    </header>
-    <section>
-      <ul id="item-list">
-        <li class="item">
-          <ul>
-            <li class="item-job">
-              <input id="item-id" type="checkbox"></input>
-              <label class="item-label" for="item-id">
-                <img src="./src/avatar.jpg">
-                <span class="item-title">Unity Programmer</span>
-                <span class="item-companyName">Golden Slash</span>
-              </label>
-              <ul><li>This is the description</li></ul>
-            </li>
-            <li class="item-url">
-              <a href="#" target="_blank"><i class="fa fa-external-link"></i></a>
-            </li>
-            <li class="item-fav">
-              <i class="fa fa-star"></i>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <article id="about-info">
-        <span>About:</span>
-        <p>
-          Seek to Remote Lite is a liteweight web application to explore and recommend remote
-          jobs all over the world.<br> <br> There're
-          15+ categories in the drop down menu [ at top left ] . Buttons
-          mentioned below take what's been selected to get the job posts.
-          Click the post to check out the job description, click the
-          hyperlink to open job application page in another browser, or
-          click the star button to save the job post.<br> <br>
-          Explore Openings [ the compass icon ] : <br>The application searches 10
-          newest job posts from Remotive.io then
-          provides them in a list.<br> <br> I'm Feeling Lucky [ the dice icon ] :<br>
-          The application searches job
-          posts from Remotive.io in bulk, then it randomly picks 10 job
-          posts among them. If you Like one then save it, chances are that
-          you may not see the same job post again ever.<br> <br>
-          My Favorites [ the star icon ] :<br> The
-          application shows all job posts you've saved. To remove one, just
-          simply click its star button again. Please note that having
-          insufficient favorites can cause the application to recommend 0
-          job post.<br> <br> Recommendation [ the thumb-up icon ] :<br> The
-          application searches job posts from
-          Remotive.io in bulk, then compares the similarity between input
-          job posts and your saved job posts in 'My Favorites' to determine
-          recommended jobs for you.<br> <br> ***IMPORTANT*** : Be
-          sure to logout before closing the tab / browser, otherwise your
-          latest changes may not be saved.<br> <br> Should you
-          have any questions or suggestions? please send emails to zacktcheng@gmail.com :))
-        </p>
-      </article>
-      <section id="login-form">
-        <span>Welcome!<br>Please login or register.</span>
-        <input id="username" name="username" placeholder="Username" type="text"> 
-        <input id="password" name="password" placeholder="Password" type="password">
-        <div class="form-btns">
-          <button id="login-btn">Login</button>
-          <button id="register-form-btn">Register</button>
-        </div>
-        <p id="login-error" class="message"></p>
-      </section>
-      <section id="register-form">
-        <p class="register-rule">
-                  Please follow these rules to set up your account:<br> 
-          6 characters long at minimum, can be any combination of letters and
-                    numbers.<br> 
-          Cannot contain non-alphanumeric characters or white spaces.<br>
-        </p>
-        <input id="register-username" name="username" placeholder="Username" type="text"> 
-        <input id="register-password" name="password" placeholder="Password" type="password">
-        <input id="register-first-name" name="first-name" placeholder="First name" type="text">
-        <input id="register-last-name" name="last-name" placeholder="Last name" type="text">
-        <div class="form-btns">
-          <button id="register-btn">Register</button>
-          <button id="login-form-btn">Back to login</button>
-        </div>
-        <p id="register-result" class="message"></p>
-      </section>
     </section>
-    <footer></footer>
+    <nav id="navigator">
+      <div id="menu-btn" class="buttons">
+        <i class="fa fa-bars"></i>
+        <span class="btn-span">List of Occupations</span>
+      </div>
+      <div id="category-menu" class="menu">
+        <div id="menu-header">Software Development</div>
+        <div>Customer Service</div>
+        <div>Design</div>
+        <div>Marketing</div>
+        <div>Sales</div>
+        <div>Product</div>
+        <div>Business</div>
+        <div>Data</div>
+        <div>DevOps / Sysadmin</div>
+        <div>Finance / Legal</div>
+        <div>Human Resources</div>
+        <div>QA</div>
+        <div>Writing</div>
+        <div>Medical / Health</div>
+        <div id="menu-footer">All others</div>
+      </div>
+      <div id="explore-btn" class="buttons active">
+        <i class="fa fa-binoculars"></i>
+        <span class="btn-span">Explore Openings</span>
+      </div>
+      <div id="lottery-btn" class="buttons">
+        <i class="fa fa-smile-o"></i>
+        <span class="btn-span">I'm Feeling Lucky</span>
+      </div>
+      <div id="favorite-btn" class="buttons">
+        <i class="fa fa-star"></i>
+        <span class="btn-span">My Favorites</span>
+      </div>
+      <div id="recommend-btn" class="buttons">
+        <i class="fa fa-lightbulb-o"></i>
+        <span class="btn-span">Recommendation</span>
+      </div>
+      <div id="about-btn" class="buttons">
+        <i class="fa fa-info-circle"></i>
+        <span class="btn-span">About</span>
+      </div>
+      <div id="logout-btn" class="buttons">
+        <i class="fa fa-sign-out"></i>
+        <span class="btn-span">Logout</span>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <span id="session-info"></span>
+    <ul id="item-list">
+      <li class="item">
+        <section class="item-header">
+          <img src="./src/avatar.jpg">
+          <div class="item-com-title">
+            <span class="item-title">Unity Programmer</span>
+            <span>Golden Slash</span>
+          </div>
+          <div class="item-date-cat">
+            <div>
+              <i class="fa fa-calendar"></i>
+              <span>Post Date: 2021-07-09</span>
+            </div>
+            <div>
+              <i class="fa fa-briefcase"></i>
+              <span>Software Development</span>
+            </div>
+          </div>          
+        </section>
+        <section class="item-details">
+          <div>
+            <i class="fa fa-clock-o"></i>
+            <span>Job Type: Full-Time</span>
+          </div>
+          <div>
+            <i class="fa fa-map-marker"></i>
+            <span>Location: New Taipei City, Taiwan</span>
+          </div>
+          <div>
+            <i class="fa fa-usd"></i>
+            <span>Salary: 600k/year NTD</span>
+          </div>
+        </section>  
+        <section class="item-nav">
+          <div class="fav-openTab">
+            <div class="item-buttons">
+              <i class="fa fa-star"></i>
+              <span>Save to My Favorites</span>
+            </div>
+            <a class="item-buttons" href="#" target="_blank">
+              <i class="fa fa-external-link"></i>
+              <span>Open in New Tab / Apply Now!</span>
+            </a>
+          </div>
+          <input id="item-id" type="checkbox">
+          <label class="item-label" for="item-id">
+            <i class="fa fa-list-ul"></i>
+            <span>Job Description</span>
+            <i class="fa fa-arrow-down"></i>
+          </label>
+          <p>This is description</p>
+        </section>
+      </li>
+    </ul>
+     <p id="about-info">
+       Seek to Remote Lite is a lightweight web application to explore and recommend remote
+       jobs all over the world.<br> 
+       <br> 
+       There're 15+ occupation categories in the drop down menu(with the bars icon). Buttons
+       mentioned below take what's been selected to get the job posts. Click the post 
+       to check out the job description, click the hyperlink to open job application page 
+       in another browser, or click the star button to save the job post.<br> 
+       <br>
+       Explore Openings(with the binoculars icon):<br>
+       The application searches 20 newest job posts from Remotive.io then provides them in 
+       a list.<br> 
+       <br> 
+       I'm Feeling Lucky(with the smiling face icon):<br>
+       The application searches job posts from Remotive.io in bulk, then it randomly picks 
+       20 job posts among them. If you Like one then save it, chances are that you may not see 
+       the same job post again ever.<br> 
+       <br>
+       My Favorites(with the star icon):<br> 
+       The application shows all job posts you've saved. To remove one, just simply click its 
+       star button again. Please note that having insufficient favorites can cause the 
+       application to recommend 0 job post.<br> 
+       <br> 
+       Recommendation(with the light bulb icon):<br> 
+       The application searches job posts from Remotive.io in bulk, then compares the 
+       similarity between input job posts and your saved job posts in 'My Favorites' to 
+       determine recommended jobs for you.<br> 
+       <br> 
+       ***IMPORTANT*** : Be sure to logout before closing the tab / browser, otherwise your
+       latest changes may not be saved.<br> 
+       <br> 
+       Got issues? please send emails to zacktcheng@gmail.com :))
+     </p>
+    <section id="login-form" class="log-reg-form">
+      <span>Welcome!<br>Please login or register.</span>
+      <input id="username" name="username" placeholder="Username" type="text"> 
+      <input id="password" name="password" placeholder="Password" type="password">
+      <nav class="form-nav">
+        <button id="login-btn" class="form-buttons">Login</button>
+        <button id="register-form-btn" class="form-buttons">Register</button>
+      </nav>
+      <p id="login-error" class="message"></p>
+    </section>
+    <section id="register-form" class="log-reg-form">
+      <p class="register-rule">
+        Please follow these rules to set up your account:<br> 
+        6 characters long at minimum, can be any combination of letters and numbers.<br> 
+        Cannot contain non-alphanumeric characters or white spaces.<br>
+      </p>
+      <input id="register-username" name="username" placeholder="Username" type="text"> 
+      <input id="register-password" name="password" placeholder="Password" type="password">
+      <input id="register-first-name" name="first-name" placeholder="First name" type="text">
+      <input id="register-last-name" name="last-name" placeholder="Last name" type="text">
+      <nav class="form-nav">
+        <button id="register-btn" class="form-buttons">Register</button>
+        <button id="login-form-btn" class="form-buttons">Back to login</button>
+      </nav>
+      <p id="register-result" class="message"></p>
+    </section>
   </main>
+  <footer>
+    <section>
+      <div>
+        <i class="fa fa-map-marker"></i>
+        <span>Kirkland, WA 98034</span>
+      </div>
+      <div>
+        <i class="fa fa-phone"></i>
+        <span>+1 323-774-3166</span>
+      </div>
+      <div>
+        <i class="fa fa-at"></i>
+        <span>zacktcheng@gmail.com</span>
+      </div>
+    </section>
+    <nav>
+      <span>Find me on:</span>
+      <div>
+        <a href="https://github.com/zacktcheng" target="_blank"><i class="fa fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/zack-cheng-3684506b" target="_blank"><i class="fa fa-linkedin"></i></a>
+        <a href="https://www.facebook.com" target="_blank"><i class="fa fa-facebook"></i></a>
+        <a href="https://www.instagram.com" target="_blank"><i class="fa fa-instagram"></i></a>
+      </div>
+    </nav>
+  </footer>
   <script src="https://rawgit.com/emn178/js-md5/master/build/md5.min.js"></script>
   <script src="scripts/main.js"></script>
 </body>

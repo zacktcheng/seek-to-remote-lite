@@ -32,9 +32,20 @@ public class MySQLTableCreation {
 			statement.executeUpdate(sql);
 
 			// step 3. create new tables.
-			sql = "CREATE TABLE items(" + "item_id VARCHAR(255) NOT NULL," + "title VARCHAR(255),"
-					+ "company_name VARCHAR(255)," + "category VARCHAR(225)," + "url VARCHAR(255),"
-					+ "company_logo_url VARCHAR(225)," + "description TEXT," + "PRIMARY KEY (item_id)" + ")";
+			sql = "CREATE TABLE items(" 
+			        + "item_id VARCHAR(255) NOT NULL," 
+					+ "title VARCHAR(255),"
+					+ "company_name VARCHAR(255)," 
+					+ "category VARCHAR(225)," 
+					+ "url VARCHAR(255),"
+					+ "company_logo_url VARCHAR(225),"
+					+ "job_type VARCHAR(225),"
+					+ "publication_date VARCHAR(225),"
+					+ "required_location VARCHAR(225),"
+					+ "salary VARCHAR(225),"
+					+ "description TEXT," 
+					+ "PRIMARY KEY (item_id)" 
+					+ ")";
 			statement.executeUpdate(sql);
 
 			sql = "CREATE TABLE users(" + "user_id VARCHAR(255) NOT NULL," + "password VARCHAR(255) NOT NULL,"

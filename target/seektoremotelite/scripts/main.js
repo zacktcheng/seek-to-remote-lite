@@ -9,15 +9,12 @@
 
     var aboutBtn = document.getElementById('about-btn');
     var logoutBtn = document.getElementById('logout-btn');
-    var pcNavigator = document.getElementById('pc-navigator');
-    var mbExploreBtn = document.getElementById('mobile-explore-btn');
-    var mbLotteryBtn = document.getElementById('mobile-lottery-btn');
-    var mbFavoriteBtn = document.getElementById('mobile-favorite-btn');
-    var mbRecommendBtn = document.getElementById('mobile-recommend-btn');
-    var categoryMenu = document.getElementById('category-menu');
     var aboutInfo = document.getElementById('about-info');
     var loginForm = document.getElementById('login-form');
     var registerForm = document.getElementById('register-form');
+    var navigator = document.getElementById('navigator');
+    var categoryMenu = document.getElementById('category-menu');
+    var sessionInfo = document.getElementById('session-info');
     var itemList = document.getElementById('item-list');
 
     /**
@@ -30,15 +27,12 @@
         document.getElementById('login-btn').addEventListener('click', login);
         document.getElementById('register-form-btn').addEventListener('click', showRegisterForm);
         document.getElementById('register-btn').addEventListener('click', register);
-        categoryMenu.addEventListener("change", getCategory);
-        document.getElementById('pc-explore-btn').addEventListener('click', loadSearchItems);
-        document.getElementById('pc-lottery-btn').addEventListener('click', loadRandomsearchItems);
-        document.getElementById('pc-favorite-btn').addEventListener('click', loadFavoriteItems);
-        document.getElementById('pc-recommend-btn').addEventListener('click', loadRecommendedItems);
-        mbExploreBtn.addEventListener('click', loadSearchItems);
-        mbLotteryBtn.addEventListener('click', loadRandomsearchItems);
-        mbFavoriteBtn.addEventListener('click', loadFavoriteItems);
-        mbRecommendBtn.addEventListener('click', loadRecommendedItems);
+        document.getElementById('menu-btn').addEventListener('click', toggleMenu);
+        addEventListenerToCategoryDivs();
+        document.getElementById('explore-btn').addEventListener('click', loadSearchItems);
+        document.getElementById('lottery-btn').addEventListener('click', loadRandomsearchItems);
+        document.getElementById('favorite-btn').addEventListener('click', loadFavoriteItems);
+        document.getElementById('recommend-btn').addEventListener('click', loadRecommendedItems);
         aboutBtn.addEventListener('click', showAboutInfo);
 
         validateSession();
@@ -51,8 +45,8 @@
     function validateSession() {
         onSessionInvalid();
         // The request parameters
-        let url = './login';
-        let req = JSON.stringify({});
+        var url = './login';
+        var req = JSON.stringify({});
 
         // display loading message
         showLoadingMessage('Validating session...');
@@ -61,7 +55,7 @@
         ajax('GET', url, req,
             // session is still valid
             function(res) {
-                let result = JSON.parse(res);
+                var result = JSON.parse(res);
 
                 if (result.status === 'OK') {
                     onSessionValid(result);
@@ -81,8 +75,8 @@
 
         showElement(aboutBtn);
         showElement(logoutBtn);
-        toggleButtonsVisibility(true);
-        showElement(categoryMenu);
+        showElement(navigator, 'flex');
+        showElement(sessionInfo, 'inline-block');
         showElement(itemList);
 
         loadSearchItems();
@@ -91,8 +85,7 @@
     function onSessionInvalid() {
         hideElement(aboutBtn);
         hideElement(logoutBtn);
-        toggleButtonsVisibility(false);
-        hideElement(categoryMenu);
+        hideElement(navigator);
         hideElement(aboutInfo);
         hideElement(registerForm);
         hideElement(itemList);
@@ -105,10 +98,9 @@
     function showRegisterForm() {
         hideElement(aboutBtn);
         hideElement(logoutBtn);
-        toggleButtonsVisibility(false);
-        hideElement(categoryMenu);
         hideElement(loginForm);
         hideElement(aboutInfo);
+        hideElement(navigator);
         hideElement(itemList);
         
         clearRegisterResult();
@@ -117,8 +109,8 @@
     }
 
     function showAboutInfo() {
-        let initSec = initSessionAndprocessFavItems('Saving user updates...');
-        activeBtn('about-btn', '');
+        var initSec = initSessionAndprocessFavItems();
+        activeBtn('about-btn');
 
         setTimeout(function() {
             hideElement(loginForm);
@@ -126,27 +118,10 @@
             hideElement(itemList);
 
             showElement(logoutBtn);
-            toggleButtonsVisibility(true);
-            showElement(categoryMenu); 
+            showElement(navigator, 'flex');
+            sessionInfo.textContent = 'About Seek to Remote Lite:';
             showElement(aboutInfo, 'flex');
         }, 1500 * initSec);
-    }
-    
-    function toggleButtonsVisibility(visible) {
-        if(visible) {
-           showElement(pcNavigator, 'flex');
-           showElement(mbExploreBtn);
-           showElement(mbLotteryBtn);
-           showElement(mbFavoriteBtn);
-           showElement(mbRecommendBtn);
-        } 
-        else {
-           hideElement(pcNavigator);
-           hideElement(mbExploreBtn);
-           hideElement(mbLotteryBtn);
-           hideElement(mbFavoriteBtn);
-           hideElement(mbRecommendBtn);
-        }
     }
 
     // -----------------------------------
@@ -156,13 +131,13 @@
     function login() {
         clearLoginError();
         showPending('login-form', 'login-pending');
-        let username = document.querySelector('#username').value;
-        let password = document.querySelector('#password').value;
+        var username = document.querySelector('#username').value;
+        var password = document.querySelector('#password').value;
         password = md5(username + md5(password));
 
         // The request parameters
-        let url = './login';
-        let req = JSON.stringify({
+        var url = './login';
+        var req = JSON.stringify({
             user_id: username,
             password: password,
         });
@@ -170,7 +145,7 @@
         ajax('POST', url, req,
             // successful callback
             function(res) {
-                let result = JSON.parse(res);
+                var result = JSON.parse(res);
 
                 // successfully logged in
                 if (result.status === 'OK') {
@@ -187,13 +162,13 @@
     }
 
     function showLoginError() {
-        let errorMsg = document.getElementById('login-error');
+        var errorMsg = document.getElementById('login-error');
         errorMsg.innerHTML = 'Invalid username or password.';
         showElement(errorMsg);
     }
 
     function clearLoginError() {
-        let errorMsg = document.getElementById('login-error');
+        var errorMsg = document.getElementById('login-error');
         errorMsg.innerHTML = '';
         hideElement(errorMsg);
     }
@@ -206,27 +181,28 @@
         clearRegisterResult();
         showPending('register-form', 'register-pending');
         
-        let username = document.getElementById('register-username').value;
-        let password = document.getElementById('register-password').value;
-        let firstName = document.getElementById('register-first-name').value;
-        let lastName = document.getElementById('register-last-name').value;
+        var username = document.getElementById('register-username').value;
+        var password = document.getElementById('register-password').value;
+        var firstName = document.getElementById('register-first-name').value;
+        var lastName = document.getElementById('register-last-name').value;
 
         if(username === "" || password === "" || firstName === "" || lastName === "") {
             clearPending('register-pending');
             showRegisterResult('Please fill in all fields.');
             return;
         }
-        if(username.match(/^[a-z0-9]+$/i) === null) {
+        if(username.match(/^[a-z0-9]+$/i) === null || password.match(/^[a-z0-9]+$/i) === null
+        || firstname.match(/^[a-z0-9]+$/i) === null || lastname.match(/^[a-z0-9]+$/i) === null) {
             clearPending('register-pending');
-            showRegisterResult('Invalid username.');
+            showRegisterResult('Invalid user input.');
             return
         }
         
         password = md5(username + md5(password));
 
         // The request parameters
-        let url = './register';
-        let req = JSON.stringify({
+        var url = './register';
+        var req = JSON.stringify({
             user_id: username,
             password: password,
             first_name: firstName,
@@ -236,7 +212,7 @@
         ajax('POST', url, req,
             // successful callback
             function(res) {
-                let result = JSON.parse(res);
+                var result = JSON.parse(res);
 
                 // successfully logged in
                 if (result.status === 'OK') {
@@ -257,7 +233,7 @@
     }
 
     function showRegisterResult(registerMsg) {
-        let result = document.getElementById('register-result');
+        var result = document.getElementById('register-result');
         
         if(registerMsg && registerMsg === 'Registered successfully!') {
             result.style.background = '#0077b5';
@@ -270,7 +246,7 @@
     }
 
     function clearRegisterResult() {
-        let result = document.getElementById('register-result');
+        var result = document.getElementById('register-result');
         result.innerHTML = '';
         hideElement(result);
     }
@@ -280,7 +256,8 @@
     // -----------------------------------
 
     function logout() {
-        let initSec = initSessionAndprocessFavItems('Saving user updates...');
+        var initSec = initSessionAndprocessFavItems();
+        document.getElementById('session-info').style.display = 'none';
         hideElement(aboutInfo);
 
         setTimeout(function() {
@@ -288,13 +265,13 @@
             showLoadingMessage('Logging out...');
 
             // The request parameters
-            let url = './logout';
-            let data = null;
+            var url = './logout';
+            var data = null;
 
             ajax('GET', url, data,
                 // successful callback
                 function(res) {
-                    let result = JSON.parse(res);
+                    var result = JSON.parse(res);
                     // successfully logged out
                     if (result.status === 'OK') {
                         onSessionInvalid();
@@ -313,19 +290,25 @@
     // -----------------------------------
 
     function showElement(element, style) {
-        if(element === null) throw 'element is null';
-        let displayStyle = style ? style : 'block';
+        if (element === null) throw 'element is null';
+        var displayStyle = style ? style : 'block';
+        if (element.id === 'about-info') {
+            document.getElementsByTagName('MAIN')[0].style.minHeight = 'calc(100vh - 181px)';
+        }
         element.style.display = displayStyle;
     }
 
     function hideElement(element) {
-        if(element === null) throw 'element is null';
+        if (element === null) throw 'element is null';
+        if (element.id === 'about-info') {
+            document.getElementsByTagName('MAIN')[0].style.minHeight = 'calc(100vh - 151px)';
+        }
         element.style.display = 'none';
     }
     
     function showPending(parentId, childId) {
-        let parent = document.getElementById(parentId);
-        let child = $create('i', 
+        var parent = document.getElementById(parentId);
+        var child = $create('i', 
         {
           id: childId,
           class: 'fa fa-spinner fa-spin'
@@ -334,26 +317,49 @@
     }
     
     function clearPending(childId) {
-       let child = document.getElementById(childId);
+       var child = document.getElementById(childId);
        child.parentNode.removeChild(child);
 
     }
+    
+    function toggleMenu(toOpen) {
+        if(toOpen) {
+            categoryMenu.style.width = '100%';
+        } else {
+            categoryMenu.style.width = '0';
+        }
+    }
+    
+    function addEventListenerToCategoryDivs() {
+        var categories = document.getElementById('category-menu').children;
+        for(var i = 0; i < categories.length; i++) {
+            categories[i].addEventListener('click', getCategoryAndCloseMenu); 
+        }
+    }
 
-    function getCategory() {
+    function getCategoryAndCloseMenu() {  
         toggleTempFavItemsAtBackEnd();
-        let element = document.getElementById("category-menu");
-        category = element.options[element.selectedIndex].text;
+        category = this.textContent;
+        toggleMenu(false);
     }
 
     function toggleFavItem(item) {
-        let key = 'item-' + item.itemId;
-        let root = document.getElementById(key);
-        let isPreviouslyFavorited = root.getAttribute('data-favorite') === 'true';
-        let favIcon = document.getElementById('item-favIcon-' + item.itemId);
+        var key = 'item-' + item.itemId;
+        var root = document.getElementById(key);
+        var isPreviouslyFavorited = root.getAttribute('data-favorite') === 'true';
+        var favIcon = document.getElementById('item-favIcon-' + item.itemId);
+        var favQuote = document.getElementById('item-favQuote-' + item.itemId);
 
         // Invert the values at front-end.
         root.dataset.favorite = !isPreviouslyFavorited;
-        favIcon.className = isPreviouslyFavorited ? 'fa fa-star-o' : 'fa fa-star';
+        
+        if (isPreviouslyFavorited) {
+            favIcon.children[0].className = 'fa fa-star-o';
+            favQuote.textContent = 'Save to My Favorites';
+        } else {
+            favIcon.children[0].className = 'fa fa-star';
+            favQuote.textContent = 'Saved';
+        }
 
         // Store { key : [item, true/false] } in tempFavItems for back-end.  
         if (tempFavItems.hasOwnProperty(key)) {
@@ -364,33 +370,32 @@
         }
     }
 
-    function initSessionAndprocessFavItems(msg) {
+    function initSessionAndprocessFavItems() {
+        // Close unclosed category menu just in case.
+        toggleMenu(false);
+    
         // Initiate a session with empty background.
         document.getElementById('item-list').innerHTML = '';
 
         // Process remaining items then reset array empty. 
-        let itemsNum = toggleTempFavItemsAtBackEnd();
+        var itemsNum = toggleTempFavItemsAtBackEnd();
 
         // Print out loading message to notify the end user when itemsNum > 0.
-        if (itemsNum > 0 && typeof msg === 'string') {
-            showLoadingMessage(msg);
+        if (itemsNum > 0) {
+            showLoadingMessage('Saving user updates...');
         }
-        return itemsNum; // Will be passed as initSec to let ajax function await.
+        return itemsNum; // Will be passed as initSec to var ajax function await.
     }
 
-    function activeBtn(pcBtnId, mbBtnId) {
-        let buttons = document.getElementsByClassName('buttons');
-        console.log('inside activeBtn, button length: ' + buttons.length);
-        console.log(pcBtnId + ', ' + mbBtnId);
-        for (let i = 0; i < buttons.length; i++) {
+    function activeBtn(btnId) {
+        var buttons = document.getElementsByClassName('buttons');
+        
+        for (var i = 0; i < buttons.length; i++) {
 
-            if (buttons[i].id !== 'category-menu') {
-                console.log(buttons[i].id);
-                if (buttons[i].id === pcBtnId || buttons[i].id === mbBtnId) {
-                console.log('id: ' + buttons[i].id);
+            if (buttons[i].id !== 'menu-btn') {
+                if (buttons[i].id === btnId) {
                     buttons[i].className = 'buttons active';
-                }
-                else {
+                } else {
                     buttons[i].className = 'buttons';
                 }
             }
@@ -398,19 +403,19 @@
     }
 
     function showLoadingMessage(msg) {
-        let itemList = document.getElementById('item-list');
+        var itemList = document.getElementById('item-list');
         itemList.innerHTML = '<p class="notice"><i class="fa fa-spinner fa-spin"></i> ' +
             msg + '</p>';
     }
 
     function showWarningMessage(msg) {
-        let itemList = document.getElementById('item-list');
+        var itemList = document.getElementById('item-list');
         itemList.innerHTML = '<p class="notice"><i class="fa fa-exclamation-triangle"></i> ' +
             msg + '</p>';
     }
 
     function showErrorMessage(msg) {
-        let itemList = document.getElementById('item-list');
+        var itemList = document.getElementById('item-list');
         itemList.innerHTML = '<p class="notice"><i class="fa fa-exclamation-circle"></i> ' +
             msg + '</p>';
     }
@@ -422,23 +427,23 @@
      * @returns {Element}
      */
     function $create(tag, options, innerHtml) {
-        let element = document.createElement(tag);
-        for(let key in options) { element.setAttribute(key, options[key]); }
-        if(innerHtml) { element.innerHTML = innerHtml; }
+        var element = document.createElement(tag);
+        for(var key in options) { element.setAttribute(key, options[key]); }
+        if (innerHtml) { element.innerHTML = innerHtml; }
         return element;
     }
 
     /**
      * AJAX helper
      *
-     * @param method - GET|POST|PUT|DELETE
+     * @param method - GET|POST|PUT|DEvarE
      * @param url - API end point
      * @param data - request payload data
      * @param successCallback - Successful callback function
      * @param errorCallback - Error callback function
      */
     function ajax(method, url, data, successCallback, errorCallback) {
-        let xhr = new XMLHttpRequest();
+        var xhr = new XMLHttpRequest();
 
         xhr.open(method, url, true);
 
@@ -450,7 +455,7 @@
         };
 
         xhr.onerror = function() {
-            console.error("The request couldn't be completed.");
+            console.error("The request couldn't be compvared.");
             errorCallback();
         };
 
@@ -470,26 +475,26 @@
      * /search?user_id=1111&category=Software Development
      */
     function loadSearchItems() {
-        let initSec = initSessionAndprocessFavItems('Saving user updates...');
+        var initSec = initSessionAndprocessFavItems('Saving user updates...');
         hideElement(aboutInfo);
+        sessionInfo.textContent = category + ' > ' + 'Explore Openings';
         showElement(itemList);
-        console.log('inside load items.');
-        activeBtn('pc-explore-btn', 'mobile-explore-btn');
+        activeBtn('explore-btn');
 
         setTimeout(function() {
             // Display loading message.
             showLoadingMessage('Loading current openings...');
 
             // The request parameters
-            let url = './search';
-            let params = 'user_id=' + user_id + '&category=' + category;
-            let data = null;
+            var url = './search';
+            var params = 'user_id=' + user_id + '&category=' + category;
+            var data = null;
 
             // make AJAX call
             ajax('GET', url + '?' + params, data,
                 // successful callback
                 function(res) {
-                    let items = JSON.parse(res);
+                    var items = JSON.parse(res);
 
                     if (!items || items.length === 0) {
                         showWarningMessage('No available openings.');
@@ -511,25 +516,26 @@
      * /randomsearch?user_id=1111&category=Software Development
      */
     function loadRandomsearchItems() {
-        let initSec = initSessionAndprocessFavItems('Saving user updates...');
+        var initSec = initSessionAndprocessFavItems();
         hideElement(aboutInfo);
+        sessionInfo.textContent = category + ' > ' + 'I\'m Feeling Lucky';
         showElement(itemList);
-        activeBtn('pc-lottery-btn', 'mobile-lottery-btn');
+        activeBtn('lottery-btn');
 
         setTimeout(function() {
             // Display loading message.
             showLoadingMessage('Loading random openings...');
 
             // The request parameters
-            let url = './randomsearch';
-            let params = 'user_id=' + user_id + '&category=' + category;
-            let data = null;
+            var url = './randomsearch';
+            var params = 'user_id=' + user_id + '&category=' + category;
+            var data = null;
 
             // make AJAX call
             ajax('GET', url + '?' + params, data,
                 // successful callback
                 function(res) {
-                    let items = JSON.parse(res);
+                    var items = JSON.parse(res);
 
                     if (!items || items.length === 0) {
                         showWarningMessage('No available random openings.');
@@ -551,24 +557,25 @@
      * /history?user_id=1111
      */
     function loadFavoriteItems() {
-        let initSec = initSessionAndprocessFavItems('Saving user updates...');
+        var initSec = initSessionAndprocessFavItems();
         hideElement(aboutInfo);
+        sessionInfo.textContent = 'My Favorites';
         showElement(itemList);
-        activeBtn('pc-favorite-btn', 'mobile-favorite-btn');
+        activeBtn('favorite-btn');
 
         setTimeout(function() {
             // Display loading message.
             showLoadingMessage('Loading favorite job posts...');
 
             // request parameters
-            let url = './history';
-            let params = 'user_id=' + user_id;
-            let req = JSON.stringify({});
+            var url = './history';
+            var params = 'user_id=' + user_id;
+            var req = JSON.stringify({});
 
             // make AJAX call
             ajax('GET', url + '?' + params, req, 
                 function(res) {
-                    let items = JSON.parse(res);
+                    var items = JSON.parse(res);
 
                     if (!items || items.length === 0) {
                         showWarningMessage('No favorite job post.');
@@ -589,27 +596,28 @@
      * /recommendation?user_id=1111
      */
     function loadRecommendedItems() {
-        let initSec = initSessionAndprocessFavItems('Saving user updates...');
+        var initSec = initSessionAndprocessFavItems();
         hideElement(aboutInfo);
+        document.getElementById('session-info').innerHTML = category + ' > ' + 'Recommendation';
         showElement(itemList);
-        activeBtn('pc-recommend-btn', 'mobile-recommend-btn');
+        activeBtn('recommend-btn');
 
         setTimeout(function() {
             // Display loading message.
             showLoadingMessage('Loading recommended jobs...');
 
             // request parameters
-            let url = './recommendation' + '?' + 'user_id=' + user_id + '&category=' + category;
-            let data = null;
+            var url = './recommendation' + '?' + 'user_id=' + user_id + '&category=' + category;
+            var data = null;
 
             // make AJAX call
             ajax('GET', url, data,
                 // successful callback
                 function(res) {
-                    let items = JSON.parse(res);
+                    var items = JSON.parse(res);
 
                     if (!items || items.length === 0) {
-                        showWarningMessage('No recommended jobs. Make sure you have favorites.');
+                        showWarningMessage('No recommended jobs. Please assure you\'ve enough favorites of the category.');
                     }
                     else {
                         listItems(items);
@@ -630,28 +638,27 @@
      *
      * @param item - The item from the list
      *
-     * API end point: [POST]/[DELETE] /history request json data: {
+     * API end point: [POST]/[DEvarE] /history request json data: {
      * user_id: 1111, favorite: item }
      */
     function toggleTempFavItemsAtBackEnd() {
         if (Object.keys(tempFavItems).length === 0) return 0;
 
-        console.log('Toggle favorite items from the previous session...');
-        let itemCount = Object.keys(tempFavItems).length;
+        var itemCount = Object.keys(tempFavItems).length;
 
-        for (let key in tempFavItems) {
+        for (var key in tempFavItems) {
             // request parameters
-            let url = './history';
-            let req = JSON.stringify({
+            var url = './history';
+            var req = JSON.stringify({
                 user_id: user_id,
                 favorite: tempFavItems[key][0]
             });
-            let method = tempFavItems[key][1] ? 'DELETE' : 'POST';
+            var method = tempFavItems[key][1] ? 'DELETE' : 'POST';
 
             ajax(method, url, req,
                 // successful callback
                 function(res) {
-                    let result = JSON.parse(res);
+                    var result = JSON.parse(res);
 
                     if (result.status === 'OK' || result.result === 'SUCCESS') {
                         console.log(key + ' result.status: ' + result.status + ' result.result: ' + result.result);
@@ -674,9 +681,9 @@
      * @param items - An array of item JSON objects
      */
     function listItems(items) {
-        let itemList = document.getElementById('item-list');
+        var itemList = document.getElementById('item-list');
         itemList.innerHTML = ''; // clear current results
-        for (let i = 0; i < items.length; i++) { addItem(itemList, items[i]); }
+        for (var i = 0; i < items.length; i++) { addItem(itemList, items[i]); }
     }
 
     /**
@@ -687,118 +694,166 @@
      *
      *Example:
      *
-     <li class="item" id="item-666617" data-favorite="true">
-      <ul>
-        <li class="item-job">
-          <input type="checkbox" id="666617">
-          <label for="666617" class="item-label">
-           <img src="https://logo.clearbit.com/panther.co">
-           <span id="item-title">Backend Engineer (Node.js + Typescript)</span>
-           <span id="item-companyName">Panther</span>
+     <li class="item" id="item-717564" data-favorite="false">
+        <section class="item-header">
+          <img src="https://logo.clearbit.com/breeze.pm">
+          <div class="item-com-title">
+            <span class="item-title">Senior Software Engineer  - Full Stack</span>
+            <span>Breeze, LLC</span>
+          </div>
+          <div class="item-date-cat">
+            <div>
+              <i class="fa fa-calendar"></i>
+              <span>2021-07-09</span>
+            </div>
+            <div>
+              <i class="fa fa-briefcase"></i>
+              <span>Software Development</span>
+            </div>
+          </div>   
+        </section>
+        <section class="item-details">
+          <div>
+            <i class="fa fa-clock-o"></i>
+            <span>Full_Time</span>
+          </div>
+          <div>
+            <i class="fa fa-map-marker"></i>
+            <span>Michigan</span>
+          </div>
+          <div>
+            <i class="fa fa-usd"></i>
+            <span>120k/year</span>
+          </div>
+        </section>  
+        <section class="item-nav">
+          <div class="fav-openTab">
+            <div id="item-favIcon-717564" class="item-buttons">
+              <i class="fa fa-star"></i>
+              <span id="item-favQuote-717564">Save to My Favorites</span>
+            </div>
+            <a class="item-buttons" href="#" target="_blank">
+              <i class="fa fa-external-link"></i>
+              <span>Open in New Tab / Apply Now!</span>
+            </a>
+          </div>
+          <input id="717564" type="checkbox">
+          <label class="item-label" for="717564">
+            <i class="fa fa-list-ul"></i>
+            <span>Job Description</span>
+            <i class="fa fa-arrow-down"></i>
           </label>
-          <ul>
-           <li>This is the job description.</li>
-          </ul>
-        </li>
-        <li class="item-url">
-          <a href="#" target="_blank"><i class="material-icons">open_in_new</i></a>
-        </li>
-        <li class="item-fav">
-          <i id="item-favIcon-666617" class="material-icons">star</i>
-        </li>
-      </ul>
-     </li>
+          <p>- 5+ years of experience working with PHP or Node.js.<br> 
+          - 2+ years of experience with any JavaScript frameworks (and openness to explore full-stack engineering).<br>
+          </p>
+        </section>
+      </li>
      */
     function addItem(itemList, item) {
         // Immediately return if any of below attributes is invalid.
         if (typeof item.itemId === 'undefined' || !item.itemId
             || typeof item.title === 'undefined' || !item.title
             || typeof item.companyName === 'undefined' || !item.companyName
+            || typeof item.category === 'undefined' || !item.category
             || typeof item.url === 'undefined' || !item.url) {
+            console.log('WARNING: At least 1 of the essential item key is missing.');
             return;
         }
 
         // Optional attributes.
-        let item_companyLogoUrl = './src/no-image-icon-23485.jpg';
-        let item_description = 'For more info of this job post, please click on the url link by the star button.'
-
-        if (typeof item.companyLogoUrl !== 'undefined' && item.companyLogoUrl) {
-            item_companyLogoUrl = item.companyLogoUrl;
-        }
-
-        if (typeof item.description !== 'undefined' && item.description) {
-            item_description = item.description.replace(/\. \-/g, '.<br> -');
-        }
+        var item_companyLogoUrl = item.companyLogoUrl ? item.companyLogoUrl : './src/no-image-icon-23485.jpg';
+        var item_jobType = item.jobType ? item.jobType : 'TBD';
+        var item_date = item.date ? item.date.substring(0, item.date.indexOf('T')) : new Date().toJSON().slice(0,10).replace(/-/g,'-');
+        var item_location = item.location ? item.location : 'Unspecified';
+        var item_salary = item.salary ? item.salary : 'Undisclosed';
+        var item_description = item.description ? item.description.replace(/\- /g, '&#9679; ').replace(/\. /g, '.<br>') : 'For more info of this job post, please click on the url link next to the star button.'
 
         // Check if item contains 'favorite' key. Each recommended item doesn't contain 'favorite' key.
-        let hasFavorite = Object.prototype.hasOwnProperty.call(item, 'favorite');
+        var hasFavorite = Object.prototype.hasOwnProperty.call(item, 'favorite');
 
         /*
-        * Construct the list item from bottom-up.
+        * Construct the list item.
         */
-
-        // Create logo element <img>.
-        let logo = $create('img', { src: item_companyLogoUrl }, '');
-        // Create title element <span>.
-        let title = $create('span', { class: 'item-title' }, item.title);
-        // Create companyName element <span>.
-        let companyName = $create('span', { class: 'item-companyName' }, item.companyName);
-        // Create id element <input>.
-        let id = $create('input', { type: 'checkbox', id: item.itemId }, '');
-        // Create label element <label> to host logo, title and companyName.
-        let label = $create('label', { for: item.itemId, class: 'item-label' }, '');
-        label.appendChild(logo);
-        label.appendChild(title);
-        label.appendChild(companyName);
-        // Create description element <li>.
-        let description = $create('li', {}, item_description);
-        // Create desList element <ul> to host description.
-        let desList = $create('ul', {}, '');
-        desList.appendChild(description);
-        // Create job element <li> to host id, label and desList.
-        let job = $create('li', { class: 'item-job' }, '');
-        job.appendChild(id);
-        job.appendChild(label);
-        job.appendChild(desList);
-
-        // Create linkIcon element <i>.
-        let linkIcon = $create('i', { class: 'fa fa-external-link' }, '');
-        // Create link element <a> to host linkIcon.
-        let link = $create('a', { href: item.url, target: '_blank' }, '');
-        link.appendChild(linkIcon);
-        // Create url element <li> to host link.
-        let url = $create('li', { class: 'item-url' }, '');
-        url.appendChild(link);
-
-        // Create favIcon element <i>.
-        let favIconClassName = 'fa fa-star-o';
-        if(hasFavorite && item.favorite) { favIconClassName = 'fa fa-star' };
-        let favIcon = $create('i', {
-            id: 'item-favIcon-' + item.itemId,
-            class: favIconClassName
-        }, '');
-        favIcon.onclick = function() { toggleFavItem(item); };
-        // Create fav element <li> to host favIcon.
-        let fav = $create('li', { class: 'item-fav' }, '');
-        fav.appendChild(favIcon);
-
-        // Create uList element <ul> to host job and url and fav.
-        let uList = $create('ul', {}, '');
-        uList.appendChild(job);
-        uList.appendChild(url);
-        uList.appendChild(fav);
-
-        // Create root element <li> to host uList.
-        let root = $create('li', { id: 'item-' + item.itemId, class: 'item' }, '');
-        if (hasFavorite) {
-            root.dataset.favorite = item.favorite;
-        } else {
-            root.dataset.favorite = false;
+        var comTitle = $create('div', { class: 'item-com-title' });
+        comTitle.appendChild($create('span', { class: 'item-title' }, item.title));
+        comTitle.appendChild($create('span', {}, item.companyName));
+        
+        var date = $create('div'); 
+        date.appendChild($create('i', { class: 'fa fa-calendar' }));
+        date.appendChild($create('span', {}, item_date));
+        
+        var category = $create('div');
+        category.appendChild($create('i', { class: 'fa fa-briefcase' }));
+        category.appendChild($create('span', {}, item.category));
+        
+        var dateCat = $create('div', { class: 'item-date-cat' });
+        dateCat.appendChild(date);
+        dateCat.appendChild(category);
+        
+        var header = $create('section', { class: 'item-header' });
+        header.appendChild($create('img', { src: item_companyLogoUrl }));
+        header.appendChild(comTitle);
+        header.appendChild(dateCat);
+        
+        var jobType = $create('div');
+        jobType.appendChild($create('i', { class: 'fa fa-clock-o' }));
+        jobType.appendChild($create('span', {}, item_jobType));
+        
+        var location = $create('div');
+        location.appendChild($create('i', { class: 'fa fa-map-marker' }));
+        location.appendChild($create('span', {}, item_location));
+        
+        var salary = $create('div');
+        salary.appendChild($create('i', { class: 'fa fa-usd' }));
+        salary.appendChild($create('span', {}, item_salary));
+        
+        var details = $create('section', { class: 'item-details' });
+        details.appendChild(jobType);
+        details.appendChild(location);
+        details.appendChild(salary);
+        
+        var favIconClassName = 'fa fa-star-o';
+        var favQuoteText = 'Save to My Favorites';
+        if(hasFavorite && item.favorite) { 
+            favIconClassName = 'fa fa-star'
+            favQuoteText = 'Already Saved';
         }
-        root.appendChild(uList);
+        var favIcon = $create('i', { class: favIconClassName });
+        var favQuote = $create('span', { id: 'item-favQuote-' + item.itemId }, favQuoteText);
+        favQuote.onclick = function() { toggleFavItem(item); };
+        var favButton = $create('div', { id: 'item-favIcon-' + item.itemId, class: 'item-buttons' });
+        favButton.appendChild(favIcon);
+        favButton.appendChild(favQuote);
+        
+        var link = $create('a', { class: 'item-buttons', href: item.url, target: '_blank' });
+        link.appendChild($create('i', { class: 'fa fa-external-link' }));
+        link.appendChild($create('span', {}, 'Open in New Tab / Apply Now!'));
+        
+        var favOpenTab = $create('div', { class: 'fav-openTab' });
+        favOpenTab.appendChild(favButton);
+        favOpenTab.appendChild(link);
+        
+        var label = $create('label', { class: 'item-label', for: item.itemId });
+        label.appendChild($create('i', { class: 'fa fa-list-ul' }));
+        label.appendChild($create('span', {}, 'Job Description'));
+        label.appendChild($create('i', { class: 'fa fa-arrow-down' }));
+        
+        var navigator = $create('section', { class: 'item-nav' });
+        navigator.appendChild(favOpenTab);
+        navigator.appendChild($create('input', { id: item.itemId, type: 'checkbox' }));
+        navigator.appendChild(label);
+        navigator.appendChild($create('p', {}, item_description));
 
-        // Append root to itemList.
-        itemList.appendChild(root);
+        var currentItem = $create('li', { id: 'item-' + item.itemId, class: 'item' });
+        currentItem.appendChild(header);
+        currentItem.appendChild(details);
+        currentItem.appendChild(navigator);
+        if (hasFavorite) {
+            currentItem.dataset.favorite = item.favorite;
+        } else {
+            currentItem.dataset.favorite = false;
+        }
+        itemList.appendChild(currentItem);
     }
 
     init();

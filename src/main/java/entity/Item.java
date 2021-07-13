@@ -14,6 +14,10 @@ public class Item {
 	private String category;
 	private String url;
 	private String companyLogoUrl;
+	private String jobType;
+	private String date;
+	private String location;
+	private String salary;
 	private String description;
 	private Set<String> keywords;
 
@@ -24,6 +28,10 @@ public class Item {
 		this.category = builder.category;
 		this.url = builder.url;
 		this.companyLogoUrl = builder.companyLogoUrl;
+		this.jobType = builder.jobType;
+		this.date = builder.date;
+		this.location = builder.location;
+		this.salary = builder.salary;
 		this.description = builder.description;
 		this.keywords = builder.keywords;
 	}
@@ -50,6 +58,22 @@ public class Item {
 
 	public String getCompanyLogoUrl() {
 		return companyLogoUrl;
+	}
+	
+	public String getJobType() {
+		return jobType;
+	}
+	
+	public String getDate() {
+		return date;
+	}
+	
+	public String getlocation() {
+		return location;
+	}
+	
+	public String getSalary() {
+		return salary;
 	}
 
 	public String getDescription() {
@@ -78,12 +102,17 @@ public class Item {
 				&& Objects.equals(companyName, comparatorItem.companyName)
 				&& Objects.equals(category, comparatorItem.category) && Objects.equals(url, comparatorItem.url)
 				&& Objects.equals(companyLogoUrl, comparatorItem.companyLogoUrl)
+				&& Objects.equals(jobType, comparatorItem.jobType)
+				&& Objects.equals(date, comparatorItem.date)
+				&& Objects.equals(location, comparatorItem.location)
+				&& Objects.equals(salary, comparatorItem.salary)
+				&& Objects.equals(description, comparatorItem.description)
 				&& Objects.equals(keywords, comparatorItem.keywords);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(itemId, title, companyName, category, url, companyLogoUrl, keywords);
+		return Objects.hash(itemId, title, companyName, category, url, companyLogoUrl, jobType, date, location, salary, description, keywords);
 	}
 
 	public JSONObject toJSONObject() {
@@ -95,6 +124,10 @@ public class Item {
 		itemJSONObj.put("category", category);
 		itemJSONObj.put("url", url);
 		itemJSONObj.put("companyLogoUrl", companyLogoUrl);
+		itemJSONObj.put("jobType", jobType);
+		itemJSONObj.put("date", date);
+		itemJSONObj.put("location", location);
+		itemJSONObj.put("salary", salary);
 		itemJSONObj.put("description", description);
 		itemJSONObj.put("keywords", keywords);
 		return itemJSONObj;
@@ -108,6 +141,10 @@ public class Item {
 		private String category;
 		private String url;
 		private String companyLogoUrl;
+		private String jobType;
+		private String date;
+		private String location;
+		private String salary;
 		private String description;
 		private Set<String> keywords;
 
@@ -138,6 +175,26 @@ public class Item {
 
 		public Builder companyLogoUrl(String companyLogoUrl) {
 			this.companyLogoUrl = companyLogoUrl;
+			return this;
+		}
+		
+		public Builder jobType(String jobType) {
+			this.jobType = jobType;
+			return this;
+		}
+		
+		public Builder date(String date) {
+			this.date = date;
+			return this;
+		}
+		
+		public Builder location(String location) {
+			this.location = location;
+			return this;
+		}
+		
+		public Builder salary(String salary) {
+			this.salary = salary;
 			return this;
 		}
 
