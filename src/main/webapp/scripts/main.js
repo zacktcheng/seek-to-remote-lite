@@ -292,17 +292,11 @@
     function showElement(element, style) {
         if (element === null) throw 'element is null';
         var displayStyle = style ? style : 'block';
-        if (element.id === 'about-info') {
-            document.getElementsByTagName('MAIN')[0].style.minHeight = 'calc(100vh - 181px)';
-        }
         element.style.display = displayStyle;
     }
 
     function hideElement(element) {
         if (element === null) throw 'element is null';
-        if (element.id === 'about-info') {
-            document.getElementsByTagName('MAIN')[0].style.minHeight = 'calc(100vh - 151px)';
-        }
         element.style.display = 'none';
     }
     

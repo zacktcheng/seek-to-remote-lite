@@ -9,7 +9,7 @@ body {
   font-weight: 500;
   font-family: 'Quicksand', sans-serif;
   color: #313131;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url("../src/dark-vector-profession-seamless.jpg"); 
+  background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url("../src/vector-profession-pattern-profession-seamless.jpg"); 
   background-attachment:fixed;
 }
 
@@ -410,6 +410,7 @@ footer {
   background: #ffffff;
   border-top: 1px solid #b0b0b0;
   flex-wrap: wrap;
+  clear: both;
 }
 
 footer > section { padding: 0.5% 3%; }
