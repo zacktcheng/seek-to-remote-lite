@@ -19,43 +19,43 @@ import recommendation.Recommendation;
  * Servlet implementation class RecommendItem
  */
 public class RecommendItem extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public RecommendItem() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public RecommendItem() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		// Assure the session's already logged-in before any recommending.
-		HttpSession session = request.getSession(false);
+        // Assure the session's already logged-in before any recommending.
+        HttpSession session = request.getSession(false);
 
-		if (session == null) {
-			response.setStatus(403);
-			return;
-		}
+        if (session == null) {
+            response.setStatus(403);
+            return;
+        }
 
-		// Recommend currently available job posts.
-		String userId = request.getParameter("user_id");
-		String category = request.getParameter("category");
+        // Recommend currently available job posts.
+        String userId = request.getParameter("user_id");
+        String category = request.getParameter("category");
 
-		Recommendation recommendation = new Recommendation();
-		List<Item> items = recommendation.recommendItems(userId, category);
-		JSONArray array = new JSONArray();
+        Recommendation recommendation = new Recommendation();
+        List<Item> items = recommendation.recommendItems(userId, category);
+        JSONArray array = new JSONArray();
 
-		for (Item item : items) {
-			array.put(item.toJSONObject());
-		}
+        for (Item item : items) {
+            array.put(item.toJSONObject());
+        }
 
-		Helper.writeJsonArray(response, array);
-	}
+        Helper.writeJsonArray(response, array);
+    }
 }

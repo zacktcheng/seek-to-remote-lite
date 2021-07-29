@@ -15,286 +15,278 @@ import external.TextRazorClient;
 
 public class MySQLConnection {
 
-	private Connection conn;
+    private Connection conn;
 
-	public MySQLConnection() {
+    public MySQLConnection() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = new MySQLDatabaseUtility().getConnection();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = new MySQLDatabaseUtility().getConnection();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+    public void close() {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-	public void close() {
+    public void setFavoriteItems(String userId, Item item) {
 
-		if (conn != null) {
-			try {
-				conn.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+        if (conn == null) {
+            System.err.println("DataBase connection failed.");
+            return;
+        }
 
-	public void setFavoriteItems(String userId, Item item) {
+        saveItem(item);
+        String sql = "INSERT INTO history (user_id, item_id) VALUES (?, ?)";
 
-		if (conn == null) {
-			System.err.println("DataBase connection failed.");
-			return;
-		}
+        try {
+            PreparedStatement prepStatement = conn.prepareStatement(sql);
+            prepStatement.setString(1, userId);
+            prepStatement.setString(2, item.getItemId());
+            prepStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-		saveItem(item);
-		String sql = "INSERT INTO history (user_id, item_id) VALUES (?, ?)";
+    public void unsetFavoriteItems(String userId, String itemId) {
 
-		try {
-			PreparedStatement prepStatement = conn.prepareStatement(sql);
-			prepStatement.setString(1, userId);
-			prepStatement.setString(2, item.getItemId());
-			prepStatement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+        if (conn == null) {
+            System.err.println("DataBase connection failed.");
+            return;
+        }
 
-	public void unsetFavoriteItems(String userId, String itemId) {
+        String sql = "DELETE FROM history WHERE user_id = ? AND item_id = ?";
 
-		if (conn == null) {
-			System.err.println("DataBase connection failed.");
-			return;
-		}
+        try {
+            PreparedStatement prepStatement = conn.prepareStatement(sql);
+            prepStatement.setString(1, userId);
+            prepStatement.setString(2, itemId);
+            prepStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-		String sql = "DELETE FROM history WHERE user_id = ? AND item_id = ?";
+    public void saveItem(Item item) {
 
-		try {
-			PreparedStatement prepStatement = conn.prepareStatement(sql);
-			prepStatement.setString(1, userId);
-			prepStatement.setString(2, itemId);
-			prepStatement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+        if (conn == null) {
+            System.err.println("DataBase connection failed.");
+            return;
+        }
 
-	public void saveItem(Item item) {
+        // Extract keywords from the description and store them in a HashSet to use in
+        // future.
+        // Keywords are used for keyword-description matching while processing
+        // recommendItems().
+        List<String> keywords = new ArrayList<>();
 
-		if (conn == null) {
-			System.err.println("DataBase connection failed.");
-			return;
-		}
+        if (!item.getDescription().isEmpty()) {
+            // Extract keywords from description.
+            keywords = TextRazorClient.extractKeywords(item.getDescription(), 10);
+        }
+        String sql = "INSERT IGNORE INTO items VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-		// Extract keywords from the description and store them in a HashSet to use in
-		// future.
-		// Keywords are used for keyword-description matching while processing
-		// recommendItems().
-		List<String> keywords = new ArrayList<>();
+        try {
+            PreparedStatement prepStatement = conn.prepareStatement(sql);
+            prepStatement.setString(1, item.getItemId());
+            prepStatement.setString(2, item.getTitle());
+            prepStatement.setString(3, item.getCompanyName());
+            prepStatement.setString(4, item.getCategory());
+            prepStatement.setString(5, item.getUrl());
+            prepStatement.setString(6, item.getCompanyLogoUrl());
+            prepStatement.setString(7, item.getJobType());
+            prepStatement.setString(8, item.getDate());
+            prepStatement.setString(9, item.getlocation());
+            prepStatement.setString(10, item.getSalary());
+            prepStatement.setString(11, item.getDescription());
+            prepStatement.executeUpdate();
 
-		if (!item.getDescription().isEmpty()) {
-			// Extract keywords from description.
-			keywords = TextRazorClient.extractKeywords(item.getDescription(), 10);
-		}
-		String sql = "INSERT IGNORE INTO items VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            sql = "INSERT IGNORE INTO keywords VALUES (?, ?)";
+            prepStatement = conn.prepareStatement(sql);
+            prepStatement.setString(1, item.getItemId());
 
-		try {
-			PreparedStatement prepStatement = conn.prepareStatement(sql);
-			prepStatement.setString(1, item.getItemId());
-			prepStatement.setString(2, item.getTitle());
-			prepStatement.setString(3, item.getCompanyName());
-			prepStatement.setString(4, item.getCategory());
-			prepStatement.setString(5, item.getUrl());
-			prepStatement.setString(6, item.getCompanyLogoUrl());
-			prepStatement.setString(7, item.getJobType());
-			prepStatement.setString(8, item.getDate());
-			prepStatement.setString(9, item.getlocation());
-			prepStatement.setString(10, item.getSalary());
-			prepStatement.setString(11, item.getDescription());
-			prepStatement.executeUpdate();
+            if (keywords.size() > 0) {
+                for (String keyword : keywords) {
+                    if (keyword != null && !keyword.trim().isEmpty()) {
+                        prepStatement.setString(2, keyword);
+                        prepStatement.executeUpdate();
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-			sql = "INSERT IGNORE INTO keywords VALUES (?, ?)";
-			prepStatement = conn.prepareStatement(sql);
-			prepStatement.setString(1, item.getItemId());
+    public Set<String> getFavoriteItemIds(String userId) {
 
-			if (keywords.size() > 0) {
-				for (String keyword : keywords) {
-					if (keyword != null && !keyword.trim().isEmpty()) {
-						prepStatement.setString(2, keyword);
-						prepStatement.executeUpdate();
-					}
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+        if (conn == null) {
+            System.err.println("DataBase connection failed.");
+            return new HashSet<>();
+        }
 
-	public Set<String> getFavoriteItemIds(String userId) {
+        Set<String> favoriteItems = new HashSet<>();
 
-		if (conn == null) {
-			System.err.println("DataBase connection failed.");
-			return new HashSet<>();
-		}
+        try {
+            String sql = "SELECT item_id FROM history WHERE user_id = ?";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, userId);
+            ResultSet resultSet = statement.executeQuery();
 
-		Set<String> favoriteItems = new HashSet<>();
+            while (resultSet.next()) {
+                String itemId = resultSet.getString("item_id");
+                favoriteItems.add(itemId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return favoriteItems;
+    }
 
-		try {
-			String sql = "SELECT item_id FROM history WHERE user_id = ?";
-			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, userId);
-			ResultSet resultSet = statement.executeQuery();
+    public Set<Item> getFavoriteItems(String userId) {
 
-			while (resultSet.next()) {
-				String itemId = resultSet.getString("item_id");
-				favoriteItems.add(itemId);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+        if (conn == null) {
+            System.err.println("DataBase connection failed.");
+            return new HashSet<>();
+        }
 
-		return favoriteItems;
-	}
+        Set<Item> favoriteItems = new HashSet<>();
+        Set<String> favoriteItemIds = getFavoriteItemIds(userId);
 
-	public Set<Item> getFavoriteItems(String userId) {
+        String sql = "SELECT * FROM items WHERE item_id = ?";
 
-		if (conn == null) {
-			System.err.println("DataBase connection failed.");
-			return new HashSet<>();
-		}
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);
 
-		Set<Item> favoriteItems = new HashSet<>();
-		Set<String> favoriteItemIds = getFavoriteItemIds(userId);
+            for (String itemId : favoriteItemIds) {
+                statement.setString(1, itemId);
+                ResultSet resultSet = statement.executeQuery();
 
-		String sql = "SELECT * FROM items WHERE item_id = ?";
+                Builder builder = new Item.Builder();
 
-		try {
-			PreparedStatement statement = conn.prepareStatement(sql);
+                if (resultSet.next()) {
+                    builder.itemId(resultSet.getString("item_id"));
+                    builder.title(resultSet.getString("title"));
+                    builder.companyName(resultSet.getString("company_name"));
+                    builder.category(resultSet.getString("category"));
+                    builder.url(resultSet.getString("url"));
+                    builder.companyLogoUrl(resultSet.getString("company_logo_url"));
+                    builder.jobType(resultSet.getString("job_type"));
+                    builder.date(resultSet.getString("publication_date"));
+                    builder.location(resultSet.getString("required_location"));
+                    builder.salary(resultSet.getString("salary"));
+                    builder.description(resultSet.getString("description"));
+                    builder.keywords(getKeywords(itemId));
+                    favoriteItems.add(builder.build());
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return favoriteItems;
+    }
 
-			for (String itemId : favoriteItemIds) {
-				statement.setString(1, itemId);
-				ResultSet resultSet = statement.executeQuery();
+    public Set<String> getKeywords(String itemId) {
 
-				Builder builder = new Item.Builder();
+        if (conn == null) {
+            System.err.println("DataBase connection failed.");
+            return null;
+        }
 
-				if (resultSet.next()) {
-					builder.itemId(resultSet.getString("item_id"));
-					builder.title(resultSet.getString("title"));
-					builder.companyName(resultSet.getString("company_name"));
-					builder.category(resultSet.getString("category"));
-					builder.url(resultSet.getString("url"));
-					builder.companyLogoUrl(resultSet.getString("company_logo_url"));
-					builder.jobType(resultSet.getString("job_type"));
-					builder.date(resultSet.getString("publication_date"));
-					builder.location(resultSet.getString("required_location"));
-					builder.salary(resultSet.getString("salary"));
-					builder.description(resultSet.getString("description"));
-					builder.keywords(getKeywords(itemId));
-					favoriteItems.add(builder.build());
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+        Set<String> keywords = new HashSet<>();
+        String sql = "SELECT keyword from keywords WHERE item_id = ? ";
 
-		return favoriteItems;
-	}
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, itemId);
+            ResultSet resultSet = statement.executeQuery();
 
-	public Set<String> getKeywords(String itemId) {
+            while (resultSet.next()) {
+                String keyword = resultSet.getString("keyword");
+                keywords.add(keyword);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return keywords;
+    }
 
-		if (conn == null) {
-			System.err.println("DataBase connection failed.");
-			return null;
-		}
+    public String getUsername(String userId) {
 
-		Set<String> keywords = new HashSet<>();
-		String sql = "SELECT keyword from keywords WHERE item_id = ? ";
+        if (conn == null) {
+            System.err.println("DataBase connection failed.");
+            return "";
+        }
 
-		try {
-			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, itemId);
-			ResultSet resultSet = statement.executeQuery();
+        String sql = "SELECT first_name, last_name FROM users WHERE user_id = ?";
 
-			while (resultSet.next()) {
-				String keyword = resultSet.getString("keyword");
-				keywords.add(keyword);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, userId);
+            ResultSet resultSet = statement.executeQuery();
 
-		return keywords;
-	}
+            if (resultSet.next()) {
+                return resultSet.getString("first_name") + " " + resultSet.getString("last_name");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
 
-	public String getUsername(String userId) {
+    public boolean verifyLogin(String userId, String password) {
 
-		if (conn == null) {
-			System.err.println("DataBase connection failed.");
-			return "";
-		}
+        if (conn == null) {
+            System.err.println("DataBase connection failed.");
+            return false;
+        }
 
-		String sql = "SELECT first_name, last_name FROM users WHERE user_id = ?";
+        String sql = "SELECT user_id FROM users WHERE user_id = ? AND password = ?";
 
-		try {
-			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, userId);
-			ResultSet resultSet = statement.executeQuery();
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, userId);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
 
-			if (resultSet.next()) {
-				return resultSet.getString("first_name") + " " + resultSet.getString("last_name");
-			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
+            if (resultSet.next())
+                return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
 
-		return "";
-	}
+    public boolean addUser(String userId, String password, String firstName, String lastName) {
 
-	public boolean verifyLogin(String userId, String password) {
+        if (conn == null) {
+            System.err.println("DataBase connection failed.");
+            return false;
+        }
 
-		if (conn == null) {
-			System.err.println("DataBase connection failed.");
-			return false;
-		}
+        String sql = "INSERT IGNORE INTO users VALUES (?, ?, ?, ?)";
 
-		String sql = "SELECT user_id FROM users WHERE user_id = ? AND password = ?";
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, userId);
+            statement.setString(2, password);
+            statement.setString(3, firstName);
+            statement.setString(4, lastName);
 
-		try {
-			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, userId);
-			statement.setString(2, password);
-			ResultSet resultSet = statement.executeQuery();
-
-			if (resultSet.next())
-				return true;
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-
-		return false;
-	}
-
-	public boolean addUser(String userId, String password, String firstName, String lastName) {
-
-		if (conn == null) {
-			System.err.println("DataBase connection failed.");
-			return false;
-		}
-
-		String sql = "INSERT IGNORE INTO users VALUES (?, ?, ?, ?)";
-
-		try {
-			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, userId);
-			statement.setString(2, password);
-			statement.setString(3, firstName);
-			statement.setString(4, lastName);
-
-			return statement.executeUpdate() == 1;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return false;
-	}
+            return statement.executeUpdate() == 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

@@ -38,7 +38,7 @@
         validateSession();
         // onSessionValid({"user_id":"1111","name":"John Smith","status":"OK"});
     }
-
+    
     /**
      * Session
      */
@@ -72,6 +72,8 @@
         hideElement(aboutInfo);
         hideElement(loginForm);
         hideElement(registerForm);
+        
+        setMainElementMinHeight('calc(100vh - 181px)');
 
         showElement(aboutBtn);
         showElement(logoutBtn);
@@ -90,8 +92,9 @@
         hideElement(registerForm);
         hideElement(itemList);
 
+        setMainElementMinHeight('calc(100vh - 151px)');
+        
         clearLoginError();
-
         showElement(loginForm, 'flex');
     }
 
@@ -109,7 +112,7 @@
     }
 
     function showAboutInfo() {
-        var initSec = initSessionAndprocessFavItems();
+        var initSec = initSessionAndProcessFavItems();
         activeBtn('about-btn');
 
         setTimeout(function() {
@@ -123,11 +126,10 @@
             showElement(aboutInfo, 'flex');
         }, 1500 * initSec);
     }
-
-    // -----------------------------------
-    // Login
-    // -----------------------------------
-
+    
+    /**
+     * Authentication
+     */
     function login() {
         clearLoginError();
         showPending('login-form', 'login-pending');
@@ -160,23 +162,7 @@
             }
         );
     }
-
-    function showLoginError() {
-        var errorMsg = document.getElementById('login-error');
-        errorMsg.innerHTML = 'Invalid username or password.';
-        showElement(errorMsg);
-    }
-
-    function clearLoginError() {
-        var errorMsg = document.getElementById('login-error');
-        errorMsg.innerHTML = '';
-        hideElement(errorMsg);
-    }
-
-    // -----------------------------------
-    // Register
-    // -----------------------------------
-
+    
     function register() {
         clearRegisterResult();
         showPending('register-form', 'register-pending');
@@ -232,31 +218,8 @@
         );
     }
 
-    function showRegisterResult(registerMsg) {
-        var result = document.getElementById('register-result');
-        
-        if(registerMsg && registerMsg === 'Registered successfully!') {
-            result.style.background = '#0077b5';
-            result.innerHTML = registerMsg;
-        } else {
-            result.style.background = '#f06112';
-            result.innerHTML = registerMsg;
-        }
-        showElement(result);   
-    }
-
-    function clearRegisterResult() {
-        var result = document.getElementById('register-result');
-        result.innerHTML = '';
-        hideElement(result);
-    }
-
-    // -----------------------------------
-    // Logout
-    // -----------------------------------
-
     function logout() {
-        var initSec = initSessionAndprocessFavItems();
+        var initSec = initSessionAndProcessFavItems();
         document.getElementById('session-info').style.display = 'none';
         hideElement(aboutInfo);
 
@@ -284,182 +247,7 @@
             );
         }, 1500 * initSec);
     }
-
-    // -----------------------------------
-    // Helper Functions
-    // -----------------------------------
-
-    function showElement(element, style) {
-        if (element === null) throw 'element is null';
-        var displayStyle = style ? style : 'block';
-        element.style.display = displayStyle;
-    }
-
-    function hideElement(element) {
-        if (element === null) throw 'element is null';
-        element.style.display = 'none';
-    }
     
-    function showPending(parentId, childId) {
-        var parent = document.getElementById(parentId);
-        var child = $create('i', 
-        {
-          id: childId,
-          class: 'fa fa-spinner fa-spin'
-        }, '');
-        parent.appendChild(child);
-    }
-    
-    function clearPending(childId) {
-       var child = document.getElementById(childId);
-       child.parentNode.removeChild(child);
-
-    }
-    
-    function toggleMenu(toOpen) {
-        if(toOpen) {
-            categoryMenu.style.width = '100%';
-        } else {
-            categoryMenu.style.width = '0';
-        }
-    }
-    
-    function addEventListenerToCategoryDivs() {
-        var categories = document.getElementById('category-menu').children;
-        for(var i = 0; i < categories.length; i++) {
-            categories[i].addEventListener('click', getCategoryAndCloseMenu); 
-        }
-    }
-
-    function getCategoryAndCloseMenu() {  
-        toggleTempFavItemsAtBackEnd();
-        category = this.textContent;
-        toggleMenu(false);
-    }
-
-    function toggleFavItem(item) {
-        var key = 'item-' + item.itemId;
-        var root = document.getElementById(key);
-        var isPreviouslyFavorited = root.getAttribute('data-favorite') === 'true';
-        var favIcon = document.getElementById('item-favIcon-' + item.itemId);
-        var favQuote = document.getElementById('item-favQuote-' + item.itemId);
-
-        // Invert the values at front-end.
-        root.dataset.favorite = !isPreviouslyFavorited;
-        
-        if (isPreviouslyFavorited) {
-            favIcon.children[0].className = 'fa fa-star-o';
-            favQuote.textContent = 'Save to My Favorites';
-        } else {
-            favIcon.children[0].className = 'fa fa-star';
-            favQuote.textContent = 'Saved';
-        }
-
-        // Store { key : [item, true/false] } in tempFavItems for back-end.  
-        if (tempFavItems.hasOwnProperty(key)) {
-            delete tempFavItems[key];
-        }
-        else {
-            tempFavItems[key] = [item, isPreviouslyFavorited];
-        }
-    }
-
-    function initSessionAndprocessFavItems() {
-        // Close unclosed category menu just in case.
-        toggleMenu(false);
-    
-        // Initiate a session with empty background.
-        document.getElementById('item-list').innerHTML = '';
-
-        // Process remaining items then reset array empty. 
-        var itemsNum = toggleTempFavItemsAtBackEnd();
-
-        // Print out loading message to notify the end user when itemsNum > 0.
-        if (itemsNum > 0) {
-            showLoadingMessage('Saving user updates...');
-        }
-        return itemsNum; // Will be passed as initSec to var ajax function await.
-    }
-
-    function activeBtn(btnId) {
-        var buttons = document.getElementsByClassName('buttons');
-        
-        for (var i = 0; i < buttons.length; i++) {
-
-            if (buttons[i].id !== 'menu-btn') {
-                if (buttons[i].id === btnId) {
-                    buttons[i].className = 'buttons active';
-                } else {
-                    buttons[i].className = 'buttons';
-                }
-            }
-        }
-    }
-
-    function showLoadingMessage(msg) {
-        var itemList = document.getElementById('item-list');
-        itemList.innerHTML = '<p class="notice"><i class="fa fa-spinner fa-spin"></i> ' +
-            msg + '</p>';
-    }
-
-    function showWarningMessage(msg) {
-        var itemList = document.getElementById('item-list');
-        itemList.innerHTML = '<p class="notice"><i class="fa fa-exclamation-triangle"></i> ' +
-            msg + '</p>';
-    }
-
-    function showErrorMessage(msg) {
-        var itemList = document.getElementById('item-list');
-        itemList.innerHTML = '<p class="notice"><i class="fa fa-exclamation-circle"></i> ' +
-            msg + '</p>';
-    }
-
-    /**
-     * A helper function that creates a DOM element <tag options...>
-     * @param tag
-     * @param options
-     * @returns {Element}
-     */
-    function $create(tag, options, innerHtml) {
-        var element = document.createElement(tag);
-        for(var key in options) { element.setAttribute(key, options[key]); }
-        if (innerHtml) { element.innerHTML = innerHtml; }
-        return element;
-    }
-
-    /**
-     * AJAX helper
-     *
-     * @param method - GET|POST|PUT|DEvarE
-     * @param url - API end point
-     * @param data - request payload data
-     * @param successCallback - Successful callback function
-     * @param errorCallback - Error callback function
-     */
-    function ajax(method, url, data, successCallback, errorCallback) {
-        var xhr = new XMLHttpRequest();
-
-        xhr.open(method, url, true);
-
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                successCallback(xhr.responseText);
-            }
-            else { errorCallback(); }
-        };
-
-        xhr.onerror = function() {
-            console.error("The request couldn't be compvared.");
-            errorCallback();
-        };
-
-        if (data === null) { xhr.send(); }
-        else {
-            xhr.setRequestHeader("Content-Type", "application/json;charset=utf-8");
-            xhr.send(data);
-        }
-    }
-
     // -------------------------------------
     // AJAX call server-side APIs
     // -------------------------------------
@@ -469,7 +257,7 @@
      * /search?user_id=1111&category=Software Development
      */
     function loadSearchItems() {
-        var initSec = initSessionAndprocessFavItems('Saving user updates...');
+        var initSec = initSessionAndProcessFavItems('Saving user updates...');
         hideElement(aboutInfo);
         sessionInfo.textContent = category + ' > ' + 'Explore Openings';
         showElement(itemList);
@@ -510,7 +298,7 @@
      * /randomsearch?user_id=1111&category=Software Development
      */
     function loadRandomsearchItems() {
-        var initSec = initSessionAndprocessFavItems();
+        var initSec = initSessionAndProcessFavItems();
         hideElement(aboutInfo);
         sessionInfo.textContent = category + ' > ' + 'I\'m Feeling Lucky';
         showElement(itemList);
@@ -551,7 +339,7 @@
      * /history?user_id=1111
      */
     function loadFavoriteItems() {
-        var initSec = initSessionAndprocessFavItems();
+        var initSec = initSessionAndProcessFavItems();
         hideElement(aboutInfo);
         sessionInfo.textContent = 'My Favorites';
         showElement(itemList);
@@ -590,7 +378,7 @@
      * /recommendation?user_id=1111
      */
     function loadRecommendedItems() {
-        var initSec = initSessionAndprocessFavItems();
+        var initSec = initSessionAndProcessFavItems();
         hideElement(aboutInfo);
         document.getElementById('session-info').innerHTML = category + ' > ' + 'Recommendation';
         showElement(itemList);
@@ -750,7 +538,7 @@
             || typeof item.companyName === 'undefined' || !item.companyName
             || typeof item.category === 'undefined' || !item.category
             || typeof item.url === 'undefined' || !item.url) {
-            console.log('WARNING: At least 1 of the essential item key is missing.');
+            console.log('WARNING! At least 1 of the essential attributes of the item is missing.');
             return;
         }
 
@@ -808,7 +596,7 @@
         
         var favIconClassName = 'fa fa-star-o';
         var favQuoteText = 'Save to My Favorites';
-        if(hasFavorite && item.favorite) { 
+        if (hasFavorite && item.favorite) { 
             favIconClassName = 'fa fa-star'
             favQuoteText = 'Already Saved';
         }
@@ -848,6 +636,215 @@
             currentItem.dataset.favorite = false;
         }
         itemList.appendChild(currentItem);
+    }
+
+    // -----------------------------------
+    // Helper Functions
+    // -----------------------------------
+
+    function showLoginError() {
+        var errorMsg = document.getElementById('login-error');
+        errorMsg.innerHTML = 'Invalid username or password.';
+        showElement(errorMsg);
+    }
+
+    function clearLoginError() {
+        var errorMsg = document.getElementById('login-error');
+        errorMsg.innerHTML = '';
+        hideElement(errorMsg);
+    }
+    
+    function showRegisterResult(registerMsg) {
+        var result = document.getElementById('register-result');
+        
+        if (registerMsg && registerMsg === 'Registered successfully!') {
+            result.style.background = '#0077b5';
+            result.innerHTML = registerMsg;
+        } else {
+            result.style.background = '#f06112';
+            result.innerHTML = registerMsg;
+        }
+        showElement(result);   
+    }
+
+    function clearRegisterResult() {
+        var result = document.getElementById('register-result');
+        result.innerHTML = '';
+        hideElement(result);
+    }
+    
+    function showElement(element, style) {
+        if (element === null) throw 'element is null';
+        var displayStyle = style ? style : 'block';
+        element.style.display = displayStyle;
+    }
+
+    function hideElement(element) {
+        if (element === null) throw 'element is null';
+        element.style.display = 'none';
+    }
+    
+    function setMainElementMinHeight(height) {
+        document.getElementsByTagName('MAIN')[0].style.minHeight = height;
+    }
+    
+    function showPending(parentId, childId) {
+        var parent = document.getElementById(parentId);
+        var child = $create('i', 
+        {
+          id: childId,
+          class: 'fa fa-spinner fa-spin'
+        }, '');
+        parent.appendChild(child);
+    }
+    
+    function clearPending(childId) {
+        var child = document.getElementById(childId);
+        child.parentNode.removeChild(child);
+
+    }
+    
+    function toggleMenu(toOpen) {
+        if (toOpen) {
+            categoryMenu.style.width = '100%';
+        } else {
+            categoryMenu.style.width = '0';
+        }
+    }
+    
+    function addEventListenerToCategoryDivs() {
+        var categories = document.getElementById('category-menu').children;
+        for (var i = 0; i < categories.length; i++) {
+            categories[i].addEventListener('click', getCategoryAndCloseMenu); 
+        }
+    }
+
+    function getCategoryAndCloseMenu() {  
+        toggleTempFavItemsAtBackEnd();
+        category = this.textContent;
+        toggleMenu(false);
+    }
+
+    function toggleFavItem(item) {
+        var key = 'item-' + item.itemId;
+        var root = document.getElementById(key);
+        var isPreviouslyFavorited = root.getAttribute('data-favorite') === 'true';
+        var favIcon = document.getElementById('item-favIcon-' + item.itemId);
+        var favQuote = document.getElementById('item-favQuote-' + item.itemId);
+
+        // Invert the values at front-end.
+        root.dataset.favorite = !isPreviouslyFavorited;
+        
+        if (isPreviouslyFavorited) {
+            favIcon.children[0].className = 'fa fa-star-o';
+            favQuote.textContent = 'Save to My Favorites';
+        } else {
+            favIcon.children[0].className = 'fa fa-star';
+            favQuote.textContent = 'Saved';
+        }
+
+        // Store { key : [item, true/false] } in tempFavItems for back-end.  
+        if (tempFavItems.hasOwnProperty(key)) {
+            delete tempFavItems[key];
+        }
+        else {
+            tempFavItems[key] = [item, isPreviouslyFavorited];
+        }
+    }
+
+    function initSessionAndProcessFavItems() {
+        // Close unclosed category menu just in case.
+        toggleMenu(false);
+    
+        // Initiate a session with empty background.
+        document.getElementById('item-list').innerHTML = '';
+
+        // Process remaining items then reset array empty. 
+        var itemsNum = toggleTempFavItemsAtBackEnd();
+
+        // Print out loading message to notify the end user when itemsNum > 0.
+        if (itemsNum > 0) {
+            showLoadingMessage('Saving user updates...');
+        }
+        return itemsNum; // Will be passed as initSec to var ajax function await.
+    }
+
+    function activeBtn(btnId) {
+        var buttons = document.getElementsByClassName('buttons');
+        
+        for (var i = 0; i < buttons.length; i++) {
+            if (buttons[i].id !== 'menu-btn') {
+                if (buttons[i].id === btnId) {
+                    buttons[i].className = 'buttons active';
+                } else {
+                    buttons[i].className = 'buttons';
+                }
+            }
+        }
+    }
+
+    function showLoadingMessage(msg) {
+        var itemList = document.getElementById('item-list');
+        itemList.innerHTML = '<p class="notice"><i class="fa fa-spinner fa-spin"></i> ' +
+            msg + '</p>';
+    }
+
+    function showWarningMessage(msg) {
+        var itemList = document.getElementById('item-list');
+        itemList.innerHTML = '<p class="notice"><i class="fa fa-exclamation-triangle"></i> ' +
+            msg + '</p>';
+    }
+
+    function showErrorMessage(msg) {
+        var itemList = document.getElementById('item-list');
+        itemList.innerHTML = '<p class="notice"><i class="fa fa-exclamation-circle"></i> ' +
+            msg + '</p>';
+    }
+
+    /**
+     * A helper function that creates a DOM element <tag options...>
+     * @param tag
+     * @param options
+     * @returns {Element}
+     */
+    function $create(tag, options, innerHtml) {
+        var element = document.createElement(tag);
+        for(var key in options) { element.setAttribute(key, options[key]); }
+        if (innerHtml) { element.innerHTML = innerHtml; }
+        return element;
+    }
+
+    /**
+     * AJAX helper
+     *
+     * @param method - GET|POST|PUT|DEvarE
+     * @param url - API end point
+     * @param data - request payload data
+     * @param successCallback - Successful callback function
+     * @param errorCallback - Error callback function
+     */
+    function ajax(method, url, data, successCallback, errorCallback) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open(method, url, true);
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                successCallback(xhr.responseText);
+            }
+            else { errorCallback(); }
+        };
+
+        xhr.onerror = function() {
+            console.error("The request couldn't be compvared.");
+            errorCallback();
+        };
+
+        if (data === null) { xhr.send(); }
+        else {
+            xhr.setRequestHeader("Content-Type", "application/json;charset=utf-8");
+            xhr.send(data);
+        }
     }
 
     init();
