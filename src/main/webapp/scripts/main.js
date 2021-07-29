@@ -505,7 +505,7 @@
           </div>
           <div>
             <i class="fa fa-usd"></i>
-            <span>120k/year</span>
+            <span>$50k-$300k USD per year</span>
           </div>
         </section>  
         <section class="item-nav">
@@ -525,8 +525,8 @@
             <span>Job Description</span>
             <i class="fa fa-arrow-down"></i>
           </label>
-          <p>- 5+ years of experience working with PHP or Node.js.<br> 
-          - 2+ years of experience with any JavaScript frameworks (and openness to explore full-stack engineering).<br>
+          <p>&#9679; 5+ years of experience working with PHP or Node.js.<br> 
+          &#9679; 2+ years of experience with any JavaScript frameworks (and openness to explore full-stack engineering).<br>
           </p>
         </section>
       </li>
