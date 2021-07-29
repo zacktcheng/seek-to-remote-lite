@@ -147,14 +147,12 @@ public class Helper {
                         if (!compoundText.trim().isEmpty()) {
                             String sentence = "- " + compoundText;
 
-                            if (!sentence.substring(sentence.length() - 1).equals("."))
-                                sentence += ".";
+                            if (!sentence.substring(sentence.length() - 1).equals(".")) sentence += ".";
                             builder.append(sentence + " ");
                         }
                     }
                 }
-                if (builder.toString() != null)
-                    plainText = builder.toString();
+                if (builder.toString() != null) plainText = builder.toString();
             }
         }
         return plainText;
