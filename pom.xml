@@ -9,8 +9,7 @@
   <version>1.0</version>
   <packaging>war</packaging>
 
-  <name>seektoremotelite Maven Webapp</name>
-  <!-- FIXME change it to the project's website -->
+  <name>Seek to Remote Lite</name>
   <url>https://seek-to-remote-lite.herokuapp.com/</url>
 
   <properties>
