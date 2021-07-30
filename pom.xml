@@ -11,7 +11,7 @@
 
   <name>seektoremotelite Maven Webapp</name>
   <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>https://seek-to-remote-lite.herokuapp.com/</url>
 
   <properties>
 	<javaVersion>1.8</javaVersion>
@@ -28,40 +28,40 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-	  <groupId>org.apache.tomcat</groupId>
-	  <artifactId>tomcat-catalina</artifactId>
-	  <version>9.0.30</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.json</groupId>
-	  <artifactId>json</artifactId>
-	  <version>20200518</version>
-	</dependency>
-	<dependency>
-	  <groupId>com.googlecode.json-simple</groupId>
-	  <artifactId>json-simple</artifactId>
-	  <version>1.1.1</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.apache.httpcomponents</groupId>
-	  <artifactId>httpclient</artifactId>
-	  <version>4.5.12</version>
-	</dependency>
-	<dependency>
-  	  <groupId>com.textrazor</groupId>
-  	  <artifactId>textrazor</artifactId>
-  	  <version>1.0.9</version>
-	</dependency>
-	<dependency>
-	  <groupId>mysql</groupId>
-	  <artifactId>mysql-connector-java</artifactId>
-	  <version>8.0.25</version>
-	</dependency>
-	<dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-catalina</artifactId>
+      <version>9.0.30</version>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20200518</version>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.5.12</version>
+    </dependency>
+    <dependency>
+        <groupId>com.textrazor</groupId>
+        <artifactId>textrazor</artifactId>
+        <version>1.0.9</version>
+    </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.25</version>
+    </dependency>
+    <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
       <version>1.12.1</version>
-  	</dependency>
+      </dependency>
   </dependencies>
 
   <build>
@@ -102,7 +102,7 @@
           <artifactId>heroku-maven-plugin</artifactId>
           <version>3.0.3</version>
           <configuration>
-          <appName>seek-to-remote-lite</appName>
+            <appName>seek-to-remote-lite</appName>
           </configuration>
       </plugin>
       </plugins>
